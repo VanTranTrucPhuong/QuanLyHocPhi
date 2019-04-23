@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">KiemTraGiuaKi</string>
+    <string name="txtSoBienLai">Số biên lai : </string>
+    <string name="txtNgayHP">Ngày HP : </string>
+    <string name="txtMaMonHoc">Mã môn học : </string>
+    <string name="txtTenMonHoc">Tên môn học : </string>
+    <string name="txtSoTinChi">Số tín chỉ : </string>
+    <string name="txtSoTien">Số tiền: </string>
+
+    <!--row_listview_sv-->
+    <string name="title">Title</string>
+    <string name="text">Text</string>
+    <string name="image">image</string>
+
+    <!--biên lai-->
+    <string name="bill_number">Số biên lai</string>
+    <string name="bill_date">19/3/2019</string>
+</resources>
