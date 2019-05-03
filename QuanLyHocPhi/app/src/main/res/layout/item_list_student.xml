@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="horizontal">
+
+
+    <ImageView
+        android:src="@drawable/student"
+        android:id="@+id/imgIcon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:baselineAligned="false"
+        android:contentDescription="@string/image"
+        android:paddingLeft="10dp" />
+
+    <LinearLayout
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:textStyle="bold"
+            android:text="Van Tran Truc Phuong"
+            android:id="@+id/txtStName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/title"
+            android:paddingLeft="10dp"
+            android:textColor="#CC0033"
+            android:textSize="16dp" />
+
+        <TextView
+            android:text="N15DCCN121"
+            android:id="@+id/txtStID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/text"
+            android:paddingBottom="7dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="#3399FF"
+            android:textSize="12dp" />
+
+        <TextView
+            android:text="01217907118"
+            android:id="@+id/txtStPhoneNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/text"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textSize="12dp" />
+    </LinearLayout>
+
+</LinearLayout>
