@@ -27,6 +27,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 //    TABLE MONHOC
     public static final String TABLE_NAME_SUB = "subject";
+    public static final String KEY_SUB_ORDER = "_id";
     public static final String KEY_ID_SUB = "sub_id";
     public static final String KEY_NAME_SUB = "sub_name";
     public static final String KEY_CREDITNUMBER = "sub_creditnumber";
@@ -37,14 +38,15 @@ public class DBHelper extends SQLiteOpenHelper {
 
 //    Table Create Statements
 //    Student table create statement
-    private static final String CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_NAME + " ("
+    public static final String CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_NAME + " ("
             + KEY_ID + " TEXT PRIMARY KEY NOT NULL,"
             + KEY_NAME + " TEXT,"
             + KEY_PHONE + " TEXT)";
 
     // Subject table create statement
-    private static final String CREATE_TABLE_SUBJECT= "CREATE TABLE " + TABLE_NAME_SUB + " ("
-            + KEY_ID_SUB + " TEXT PRIMARY KEY NOT NULL,"
+    public static final String CREATE_TABLE_SUBJECT = "CREATE TABLE " + TABLE_NAME_SUB + " ("
+            + KEY_SUB_ORDER + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+            + KEY_ID_SUB + " VARCHAR(10) NOT NULL,"
             + KEY_NAME_SUB + " TEXT,"
             + KEY_CREDITNUMBER + " TEXT)";
     @Override

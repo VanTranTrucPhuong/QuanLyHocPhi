@@ -42,7 +42,7 @@ public class StudentModify {
         values.put(DBHelper.KEY_NAME, student.getName());
         values.put(DBHelper.KEY_PHONE, student.getPhoneNumber());
 
-        db.update(DBHelper.TABLE_NAME,values, DBHelper.KEY_ID+ "=?",new String[]{String.valueOf(student.getStudent_id())});
+        db.update(DBHelper.TABLE_NAME,values, DBHelper.KEY_ID+ "=?",new String[]{student.getStudent_id()});
         db.close();
 
     }

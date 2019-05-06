@@ -1,39 +1,64 @@
 package com.example.vantrantrucphuong.quanlyhocphi.Adapter;
 
 import android.content.Context;
-import android.database.Cursor;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CursorAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.example.vantrantrucphuong.quanlyhocphi.Model.Subject;
 import com.example.vantrantrucphuong.quanlyhocphi.R;
+
+import java.util.List;
+
 
 /**
  * Created by Van Tran Truc Phuong on 5/1/2019.
  */
 
-public class SubjectAdapter extends CursorAdapter{
-    public SubjectAdapter(Context context, Cursor c, boolean autoRequery) {
-        super(context, c, autoRequery);
+public class SubjectAdapter extends ArrayAdapter<Subject> {
+
+    private Context context;
+    private int resoure;
+    private List<Subject> listSubject;
+
+    public SubjectAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Subject> objects) {
+        super(context, resource, objects);
+        this.context= context;
+        this.resoure=resource;
+        this.listSubject=objects;
     }
 
+    @NonNull
     @Override
-    public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        View view= LayoutInflater.from(context).inflate(R.layout.item_list_subject,parent,false);
-        return view;
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        ViewHolder viewHolder;
+        if(convertView==null){
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_list_subject,parent,false);
+            viewHolder = new ViewHolder();
+            viewHolder.tvId = (TextView)convertView.findViewById(R.id.txtSubID);
+            viewHolder.tvName = (TextView)convertView.findViewById(R.id.txtSubName);
+            viewHolder.tvCreditNumber = (TextView)convertView.findViewById(R.id.txtSubCreditNumber);
+
+            convertView.setTag(viewHolder);
+        }else{
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+        Subject subject = listSubject.get(position);
+        viewHolder.tvId.setText(String.valueOf(subject.getSubject_id()));
+        viewHolder.tvName.setText(subject.getSubjectName());
+        viewHolder.tvCreditNumber.setText(subject.getCreditNumber());
+        return convertView;
     }
 
-    @Override
-    public void bindView(View view, Context context, Cursor cursor) {
-        TextView txtName, txtID, txtCreditNumber;
-        txtName=(TextView)view.findViewById(R.id.txtSubName);
-        txtID=(TextView)view.findViewById(R.id.txtSubID);
-        txtCreditNumber=(TextView)view.findViewById(R.id.txtSubCreditNumber);
+    public class ViewHolder{
 
-        txtID.setText(cursor.getString(0));
-        txtName.setText(cursor.getString(1));
-        txtCreditNumber.setText(cursor.getString(2));
+        private TextView tvId;
+        private TextView tvName;
+        private TextView tvCreditNumber;
     }
 }

@@ -1,7 +1,6 @@
 package com.example.vantrantrucphuong.quanlyhocphi.Activity;
 
 import android.app.Dialog;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,16 +16,22 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.vantrantrucphuong.quanlyhocphi.Adapter.SubjectAdapter;
+import com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper;
 import com.example.vantrantrucphuong.quanlyhocphi.Database.SubjectModify;
 import com.example.vantrantrucphuong.quanlyhocphi.Model.Subject;
 import com.example.vantrantrucphuong.quanlyhocphi.R;
 
+import java.util.List;
+
+import static com.example.vantrantrucphuong.quanlyhocphi.R.id.lvDM;
+
 public class SubjectList extends AppCompatActivity {
 
     SubjectModify subjectModify;
-    SubjectAdapter adapter;
-    ListView lvDM;
-
+    private ListView lvSubject;
+    private DBHelper dbHelper;
+    private SubjectAdapter customAdapter;
+    private List<Subject> subjectList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,18 +39,28 @@ public class SubjectList extends AppCompatActivity {
         setContentView(R.layout.activity_subject_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        lvSubject = (ListView) findViewById(lvDM);
 
-        lvDM=(ListView)findViewById(R.id.lvDM);
         subjectModify=new SubjectModify(this);
-        display();
-
-        registerForContextMenu(lvDM);
-
+        subjectList = subjectModify.getAllSubject();
+        setAdapter();
+        registerForContextMenu(lvSubject);
     }
+//
+//    public void display(){
+//        adapter=new SubjectAdapter(this, subjectModify.getAllSubject(),true);
+//        lvDM.setAdapter(adapter);
+//    }
 
-    public void display(){
-        adapter=new SubjectAdapter(this, subjectModify.getSubjectList(),true);
-        lvDM.setAdapter(adapter);
+
+    private void setAdapter() {
+        if (customAdapter == null) {
+            customAdapter = new SubjectAdapter(this, R.layout.item_list_subject, subjectList);
+            lvSubject.setAdapter(customAdapter);
+        }else{
+            customAdapter.notifyDataSetChanged();
+            lvSubject.setSelection(customAdapter.getCount()-1);
+        }
     }
 
     @Override
@@ -88,9 +103,11 @@ public class SubjectList extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Subject subject = new Subject(edtIDSub.getText().toString(),edtNameSub.getText().toString(), edtCreditNumber.getText().toString());
-                    Toast.makeText(SubjectList.this, subject.getSubject_id().toString(), Toast.LENGTH_SHORT).show();
-                    subjectModify.insert(subject);
-                    display();
+                    if (subject != null) {
+                        subjectModify.addSubject(subject);
+                    }
+                    updateListSubject();
+                    setAdapter();
                     dialog.dismiss();
                 }
             });
@@ -100,6 +117,14 @@ public class SubjectList extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void updateListSubject(){
+        subjectList.clear();
+        subjectList.addAll(subjectModify.getAllSubject());
+        if(customAdapter!= null){
+            customAdapter.notifyDataSetChanged();
+        }
     }
 
     //ContextMenu
@@ -115,14 +140,23 @@ public class SubjectList extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info=(AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-        Cursor cursor=(Cursor) lvDM.getItemAtPosition(info.position);
-        final String id = cursor.getString(0);
+        Subject subjectItem = (Subject) customAdapter.getItem(info.position);
+//        Cursor cursor=(Cursor) lvSubject.getItemAtPosition(info.position);
+        final int id = subjectItem.getId();
+
+        Toast.makeText(this, (lvSubject.getItemAtPosition(info.position)).toString(), Toast.LENGTH_SHORT).show();
+//        final int id = 2;
 
         switch (item.getItemId()){
             case R.id.action_delete:
-                subjectModify.delete(id);
-                Toast.makeText(this,"Xóa thành công", Toast.LENGTH_SHORT).show();
-                display();
+                Toast.makeText(this, String.valueOf(id), Toast.LENGTH_SHORT).show();
+                int result = subjectModify.deleteSubject(id);
+                if(result>0){
+                    Toast.makeText(this,"Xóa thành công", Toast.LENGTH_SHORT).show();
+                    updateListSubject();
+                }else{
+                    Toast.makeText(this, "Xóa thất bại", Toast.LENGTH_SHORT).show();
+                }
                 return true;
             case R.id.action_edit:
                 final Dialog dialog = new Dialog(this);
@@ -152,9 +186,20 @@ public class SubjectList extends AppCompatActivity {
                 btnUpdate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Subject subject = new Subject(edtIDSub.getText().toString(), edtNameSub.getText().toString(), edtCreditNumber.getText().toString());
-                        subjectModify.update(subject);
-                        display();
+                        Subject subject = new Subject(id, edtIDSub.getText().toString(), edtNameSub.getText().toString(), edtCreditNumber.getText().toString());
+//                        subjectModify.updateSubject(subject);
+//                        setAdapter();
+//                        updateListSubject();
+
+                        int result = subjectModify.updateSubject(subject);
+                        Toast.makeText(SubjectList.this, "ID update: " + String.valueOf(id), Toast.LENGTH_SHORT).show();
+                        if(result > 0){
+//                            subjectModify.updateSubject(subject);
+                            updateListSubject();
+                        }
+                        else {
+                            Toast.makeText(SubjectList.this, "Update thất bại", Toast.LENGTH_SHORT).show();
+                        }
                         dialog.dismiss();
                     }
                 });
