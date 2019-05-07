@@ -35,4 +35,8 @@
     <string name="maMH">Mã MH: </string>
     <string name="soTC">Số TC: </string>
 
+    <!--thêm hóa đơn-->
+    <string name="maHoadon">Mã hóa đơn :  </string>
+    <string name="Ngay">Ngay : </string>
+
 </resources>

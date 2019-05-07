@@ -21,6 +21,7 @@
         </activity>
         <activity android:name=".Activity.SubjectList">
         </activity>
+        <activity android:name=".Activity.InvoiceList"></activity>
     </application>
 
 </manifest>

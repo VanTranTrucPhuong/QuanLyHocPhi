@@ -1,6 +1,7 @@
 package com.example.vantrantrucphuong.quanlyhocphi.Activity;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +27,7 @@ public class StudentList extends AppCompatActivity {
     StudentModify studentModify;
     StudentAdapter adapter;
     ListView lvDS;
+    public String masv;
 
 
     @Override
@@ -38,8 +40,8 @@ public class StudentList extends AppCompatActivity {
         lvDS=(ListView)findViewById(R.id.lvDS);
         studentModify=new StudentModify(this);
         display();
-
         registerForContextMenu(lvDS);
+        setEvent();
 
     }
 
@@ -47,6 +49,16 @@ public class StudentList extends AppCompatActivity {
         adapter=new StudentAdapter(this, studentModify.getStudentList(),true);
         lvDS.setAdapter(adapter);
     }
+    private void setEvent() {
+        lvDS.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getApplicationContext(), InvoiceList.class);
+                startActivity(intent);
+            }
+        });
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -117,6 +129,7 @@ public class StudentList extends AppCompatActivity {
 
         Cursor cursor=(Cursor) lvDS.getItemAtPosition(info.position);
         final String id = cursor.getString(0);
+        masv= id; //luu de load cai hoa don
 
         switch (item.getItemId()){
             case R.id.action_delete:

@@ -21,9 +21,17 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String KEY_PHONE = "phone";
 
 
-//    TABLE BIENLAIHOCPHI
+    //    TABLE BIENLAIHOCPHI
+    public static final String TABLE_NAME_INVOICE = "invoice";
+    public static final String KEY_ID_INVOICE = "invoice_id";
+    //    public static final String KEY_ID_STUDENT = "student_id";
+    public static final String KEY_DATE = "date";
 
-//    TABLE THONGTINBIENLAI
+    //    TABLE THONGTINBIENLAI
+    public static final String TABLE_NAME_INFOR = "information";
+    //    public static final String KEY_ID_INVOICE = "invoice_id";
+    //    public static final String KEY_ID_STUDENT = "student_id";
+    public static final String KEY_COST = "cost";
 
 //    TABLE MONHOC
     public static final String TABLE_NAME_SUB = "subject";
@@ -49,17 +57,33 @@ public class DBHelper extends SQLiteOpenHelper {
             + KEY_ID_SUB + " VARCHAR(10) NOT NULL,"
             + KEY_NAME_SUB + " TEXT,"
             + KEY_CREDITNUMBER + " TEXT)";
+
+    //Invoice table create statement
+    private static final String CREATE_TABLE_INVOICE= "CREATE TABLE " + TABLE_NAME_INVOICE + " ("
+            + KEY_ID_INVOICE + " TEXT PRIMARY KEY NOT NULL,"
+            + KEY_ID + " TEXT,"
+            + KEY_DATE + " TEXT)";
+    //    Information of invoice
+    private static final String CREATE_TABLE_INFOR= "CREATE TABLE " + TABLE_NAME_INFOR + " ("
+            + KEY_ID_INVOICE + " TEXT PRIMARY KEY NOT NULL,"
+            + KEY_ID_SUB + " TEXT,"
+            + KEY_COST + " TEXT)";
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_STUDENT);
         db.execSQL(CREATE_TABLE_SUBJECT);
+        db.execSQL(CREATE_TABLE_INVOICE);
+        db.execSQL(CREATE_TABLE_INFOR);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // on upgrade drop older tables
-        db.execSQL("DROP TABLE IF EXITS "+TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXITS "+TABLE_NAME_SUB);
+        db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME_SUB);
+        db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME_INVOICE);
+        db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME_INFOR);
+
 
         // create new tables
         onCreate(db);
