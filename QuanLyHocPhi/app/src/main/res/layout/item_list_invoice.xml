@@ -18,31 +18,31 @@
         android:paddingLeft="6dp">
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="51dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="6dp">
 
             <TextView
-                android:id="@+id/bill_number"
+                android:id="@+id/txtInvoiceNumber"
                 android:layout_width="238dp"
-                android:layout_height="match_parent"
-                android:gravity="center|left"
+                android:layout_height="106dp"
                 android:text="@string/bill_number"
                 android:textColor="#040404"
                 android:textSize="16dp"
                 android:textStyle="bold"
                 android:typeface="sans" />
             <TextView
-                android:id="@+id/bill_student"
+                android:id="@+id/txtStudentID"
                 android:layout_width="197dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:text="SV01"
                 android:gravity="center|left"
                 android:typeface="sans" />
         </LinearLayout>
+
         <TextView
-            android:id="@+id/bill_date"
-            android:layout_width="match_parent"
+            android:id="@+id/txtDate"
+            android:layout_width="97dp"
             android:layout_height="match_parent"
             android:layout_marginTop="1dip"
             android:gravity="center|right"

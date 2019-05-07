@@ -2,6 +2,9 @@ package com.example.vantrantrucphuong.quanlyhocphi.Adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,42 +17,42 @@ import com.example.vantrantrucphuong.quanlyhocphi.Model.Invoice;
 import com.example.vantrantrucphuong.quanlyhocphi.R;
 
 public class InvoiceAdapter extends ArrayAdapter<Invoice>{
-    Context context;
-    int layoutResourceId;
-    ArrayList<Invoice> data = null;
+    private Context context;
+    private int layoutResourceId;
+    private ArrayList<Invoice> listInvoice = null;
 
-    public InvoiceAdapter(Context context, int layoutResourceId, ArrayList<Invoice>data){
-        super(context, layoutResourceId, data);
-        this.layoutResourceId = layoutResourceId;
+    public InvoiceAdapter(@NonNull Context context, @LayoutRes int layoutResourceId,@NonNull ArrayList<Invoice>objects){
+        super(context, layoutResourceId, objects);
         this.context = context;
-        this.data = data;
+        this.layoutResourceId = layoutResourceId;
+        this.listInvoice = objects;
     }
-    static class ViewHolder {
-        TextView txtNumber;
-        TextView txtDate;
-        TextView txtStudent;
-    }
-    public View getView(int position, View convertView, ViewGroup parent){
-        View row = convertView;
-        ViewHolder viewHolder = null;
-        if(row == null){
-            LayoutInflater layoutInflater = ((Activity)context).getLayoutInflater();
-            row = layoutInflater.inflate(layoutResourceId, parent, false);
 
+    @Override
+    public View getView(int position, @Nullable View convertView, @NonNull  ViewGroup parent){
+        ViewHolder viewHolder;
+        if(convertView == null){
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_list_invoice,parent,false);
             viewHolder = new ViewHolder();
-            viewHolder.txtNumber = (TextView) row.findViewById(R.id.bill_number);
-            viewHolder.txtDate = (TextView) row.findViewById(R.id.bill_date);
-            viewHolder.txtStudent = (TextView) row.findViewById(R.id.bill_student);
+            viewHolder.tvNumber = (TextView) convertView.findViewById(R.id.txtInvoiceNumber);
+            viewHolder.tvDate = (TextView) convertView.findViewById(R.id.txtDate);
+            viewHolder.tvStudentID = (TextView) convertView.findViewById(R.id.txtStudentID);
 
         }
         else {
-            viewHolder = (ViewHolder) row.getTag();
+            viewHolder = (ViewHolder) convertView.getTag();
         }
-        Invoice customListView = data.get(position);
-        viewHolder.txtNumber.setText(customListView.getInvoiceNumber());
-        viewHolder.txtDate.setText(customListView.getDate());
-        viewHolder.txtStudent.setText(customListView.getSudent_id());
-        return row;
+        Invoice invoice = listInvoice.get(position);
+        viewHolder.tvNumber.setText(invoice.getInvoiceNumber());
+        viewHolder.tvDate.setText(invoice.getDate());
+        viewHolder.tvStudentID.setText(invoice.getSudent_id());
+
+        return convertView;
+    }
+    public class ViewHolder {
+        private  TextView tvNumber;
+        private TextView tvDate;
+        private TextView tvStudentID;
     }
 
 

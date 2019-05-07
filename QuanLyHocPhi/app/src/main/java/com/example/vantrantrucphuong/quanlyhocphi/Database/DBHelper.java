@@ -13,6 +13,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 //    DATABASE_NAME
     private static final String DATABASE_NAME = "db_student";
+    public static String TAG = "DBManager";
 
 //    TABLE_STUDENT
     public static final String TABLE_NAME = "student";
@@ -61,8 +62,8 @@ public class DBHelper extends SQLiteOpenHelper {
     //Invoice table create statement
     private static final String CREATE_TABLE_INVOICE= "CREATE TABLE " + TABLE_NAME_INVOICE + " ("
             + KEY_ID_INVOICE + " TEXT PRIMARY KEY NOT NULL,"
-            + KEY_ID + " TEXT,"
-            + KEY_DATE + " TEXT)";
+            + KEY_DATE + " TEXT,"
+            + KEY_ID+ " TEXT)";
     //    Information of invoice
     private static final String CREATE_TABLE_INFOR= "CREATE TABLE " + TABLE_NAME_INFOR + " ("
             + KEY_ID_INVOICE + " TEXT PRIMARY KEY NOT NULL,"
