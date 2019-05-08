@@ -25,7 +25,7 @@
             <TextView
                 android:id="@+id/txtInvoiceNumber"
                 android:layout_width="238dp"
-                android:layout_height="106dp"
+                android:layout_height="wrap_content"
                 android:text="@string/bill_number"
                 android:textColor="#040404"
                 android:textSize="16dp"
@@ -34,18 +34,16 @@
             <TextView
                 android:id="@+id/txtStudentID"
                 android:layout_width="197dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="SV01"
-                android:gravity="center|left"
                 android:typeface="sans" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/txtDate"
             android:layout_width="97dp"
-            android:layout_height="match_parent"
+            android:layout_height="38dp"
             android:layout_marginTop="1dip"
-            android:gravity="center|right"
             android:text="@string/bill_date"
             android:textColor="#343434"
             android:textSize="12dp" />

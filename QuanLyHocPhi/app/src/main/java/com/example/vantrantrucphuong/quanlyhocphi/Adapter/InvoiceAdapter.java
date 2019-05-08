@@ -35,8 +35,8 @@ public class InvoiceAdapter extends ArrayAdapter<Invoice>{
             convertView = LayoutInflater.from(context).inflate(R.layout.item_list_invoice,parent,false);
             viewHolder = new ViewHolder();
             viewHolder.tvNumber = (TextView) convertView.findViewById(R.id.txtInvoiceNumber);
-            viewHolder.tvDate = (TextView) convertView.findViewById(R.id.txtDate);
-            viewHolder.tvStudentID = (TextView) convertView.findViewById(R.id.txtStudentID);
+            viewHolder.tvDate = (TextView) convertView.findViewById(R.id.txtStudentID);
+            viewHolder.tvStudentID = (TextView) convertView.findViewById(R.id.txtDate);
 
         }
         else {

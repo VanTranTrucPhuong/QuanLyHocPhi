@@ -25,7 +25,7 @@ public class DBHelper extends SQLiteOpenHelper {
     //    TABLE BIENLAIHOCPHI
     public static final String TABLE_NAME_INVOICE = "invoice";
     public static final String KEY_ID_INVOICE = "invoice_id";
-    //    public static final String KEY_ID_STUDENT = "student_id";
+    public static final String KEY_ID_STUDENT = "student_id";
     public static final String KEY_DATE = "date";
 
     //    TABLE THONGTINBIENLAI
@@ -63,7 +63,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_INVOICE= "CREATE TABLE " + TABLE_NAME_INVOICE + " ("
             + KEY_ID_INVOICE + " TEXT PRIMARY KEY NOT NULL,"
             + KEY_DATE + " TEXT,"
-            + KEY_ID+ " TEXT)";
+            + KEY_ID_STUDENT+ " TEXT)";
     //    Information of invoice
     private static final String CREATE_TABLE_INFOR= "CREATE TABLE " + TABLE_NAME_INFOR + " ("
             + KEY_ID_INVOICE + " TEXT PRIMARY KEY NOT NULL,"
