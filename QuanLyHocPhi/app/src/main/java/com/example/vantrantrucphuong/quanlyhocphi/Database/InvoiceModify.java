@@ -6,31 +6,54 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.vantrantrucphuong.quanlyhocphi.Activity.InvoiceList;
 import com.example.vantrantrucphuong.quanlyhocphi.Model.Invoice;
+import com.example.vantrantrucphuong.quanlyhocphi.Model.Subject;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import static com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper.KEY_INVOICE_ORDER;
+import static com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper.TABLE_NAME_INVOICE;
+
+/**
+ * Created by Van Tran Truc Phuong on 5/1/2019.
+ */
 public class InvoiceModify {
-    public static DBHelper dbHelper;
-    InvoiceList invoiceList = new InvoiceList();
+    private final String TAG = "DBManager";
+    private DBHelper dbHelper;
 
     public InvoiceModify(Context context) {
         dbHelper= new DBHelper(context);
     }
 
-    //lay tat ca du lieu trong bang
-    public ArrayList<Invoice> getAllInvoice() {
-        ArrayList<Invoice> listInvoice = new ArrayList<>();
-        String selectQuery = "SELECT * FROM invoice" ;
-        SQLiteDatabase db =  dbHelper.getWritableDatabase();
+    public void add(Invoice invoice) {
+        SQLiteDatabase db= dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+//        values.put(DBHelper.KEY_SUB_ORDER, subject.getId());
+        values.put(DBHelper.KEY_ID_INVOICE, invoice.getInvoice_id());
+        values.put(DBHelper.KEY_DATE_INVOICE, invoice.getInvoice_date());
+        values.put(DBHelper.KEY_STUDENT_INVOICE, invoice.getInvoice_student());
+
+        db.insert(TABLE_NAME_INVOICE,null,values);
+        db.close();
+        Log.d(TAG, " Successfuly");
+    }
+
+    public List<Invoice> getAll() {
+        List<Invoice> listInvoice = new ArrayList<>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_NAME_INVOICE +" WHERE  "+DBHelper.KEY_STUDENT_INVOICE+" = 'SV01'";
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery,null);
         if (cursor.moveToFirst()) {
             do {
                 Invoice invoice = new Invoice();
-                invoice.setInvoiceNumber(cursor.getString(0));
-                invoice.setDate(cursor.getString(2)+"");
-                invoice.setSudent_id(cursor.getString(1));
+                invoice.setId(cursor.getInt(0));
+                invoice.setInvoice_id(cursor.getString(1));
+                invoice.setInvoice_date(cursor.getString(2)+"");
+                invoice.setInvoice_student(cursor.getString(3));
                 listInvoice.add(invoice);
 
             } while (cursor.moveToNext());
@@ -38,44 +61,34 @@ public class InvoiceModify {
         db.close();
         return listInvoice;
     }
-    //add invoice
-    public void addInvoice(Invoice invoice) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(DBHelper.KEY_ID_INVOICE, invoice.getInvoiceNumber());
-        values.put(DBHelper.KEY_ID_STUDENT, invoice.getDate());
-        values.put(DBHelper.KEY_DATE, invoice.getSudent_id());
 
-
-        db.insert(DBHelper.TABLE_NAME_INVOICE, null, values);
-        db.close();
-        Log.d(DBHelper.TAG, "add Successfuly");
-    }
-
-//    update Invoice
-    public int updateInvoice(Invoice invoice){
+    public int update(Invoice invoice){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DBHelper.KEY_ID_INVOICE, invoice.getInvoiceNumber());
-        contentValues.put(DBHelper.KEY_ID_STUDENT, invoice.getSudent_id());
-        contentValues.put(DBHelper.KEY_DATE, invoice.getDate() );
-        return db.update(DBHelper.TABLE_NAME_INVOICE,contentValues,DBHelper.KEY_ID_INVOICE+"=?",new String[]{invoice.getInvoiceNumber()});
+        contentValues.put(DBHelper.KEY_INVOICE_ORDER,invoice.getId());
+        contentValues.put(DBHelper.KEY_ID_INVOICE,invoice.getInvoice_id());
+        contentValues.put(DBHelper.KEY_DATE_INVOICE,invoice.getInvoice_date());
+        contentValues.put(DBHelper.KEY_STUDENT_INVOICE,invoice.getInvoice_student());
+
+        return db.update(TABLE_NAME_INVOICE,contentValues,KEY_INVOICE_ORDER+"=?",new String[]{String.valueOf(invoice.getId())});
     }
 
-//    Delete invoice
-    public int deleteInvoice(String invoice_id){
+    public int delete(int invoice_id){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        return db.delete(DBHelper.TABLE_NAME_INVOICE,DBHelper.KEY_ID_INVOICE+"=?",new String[] {invoice_id});
+        return db.delete(TABLE_NAME_INVOICE,KEY_INVOICE_ORDER+"=?",new String[] {String.valueOf(invoice_id)});
     }
 
-    public Invoice fetchInvoicetByID(String invoice_id){
+
+    //Lay 1 du lieu
+    public Invoice fetchByID(int invoice_id){
         SQLiteDatabase db= dbHelper.getReadableDatabase();
-        Cursor cursor= db.query(DBHelper.TABLE_NAME_INVOICE,new String[]{DBHelper.KEY_ID_INVOICE,DBHelper.KEY_DATE,DBHelper.KEY_ID_STUDENT},DBHelper.KEY_ID_INVOICE+"=?",new String[]{String.valueOf(invoice_id)},null,null,null);
+        Cursor cursor= db.query(TABLE_NAME_INVOICE,new String[]{DBHelper.KEY_INVOICE_ORDER,DBHelper.KEY_ID_INVOICE,DBHelper.KEY_DATE_INVOICE,DBHelper.KEY_STUDENT_INVOICE},DBHelper.KEY_INVOICE_ORDER+"=?",new String[]{String.valueOf(invoice_id)},null,null,null);
         if(cursor!=null){
             cursor.moveToFirst();
         }
-        return new Invoice(cursor.getString(0),cursor.getString(1),cursor.getString(2));
+        return new Invoice(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3));
     }
+
 
 
 

@@ -15,11 +15,6 @@ import com.example.vantrantrucphuong.quanlyhocphi.R;
 
 import java.util.List;
 
-
-/**
- * Created by Van Tran Truc Phuong on 5/1/2019.
- */
-
 public class SubjectAdapter extends ArrayAdapter<Subject> {
 
     private Context context;
@@ -33,7 +28,6 @@ public class SubjectAdapter extends ArrayAdapter<Subject> {
         this.listSubject=objects;
     }
 
-    @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ViewHolder viewHolder;
@@ -52,6 +46,7 @@ public class SubjectAdapter extends ArrayAdapter<Subject> {
         viewHolder.tvId.setText(String.valueOf(subject.getSubject_id()));
         viewHolder.tvName.setText(subject.getSubjectName());
         viewHolder.tvCreditNumber.setText(subject.getCreditNumber());
+
         return convertView;
     }
 

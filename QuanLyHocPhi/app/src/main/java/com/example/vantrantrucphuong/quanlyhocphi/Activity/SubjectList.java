@@ -1,6 +1,7 @@
 package com.example.vantrantrucphuong.quanlyhocphi.Activity;
 
 import android.app.Dialog;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,9 +19,11 @@ import android.widget.Toast;
 import com.example.vantrantrucphuong.quanlyhocphi.Adapter.SubjectAdapter;
 import com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper;
 import com.example.vantrantrucphuong.quanlyhocphi.Database.SubjectModify;
+import com.example.vantrantrucphuong.quanlyhocphi.Model.Invoice;
 import com.example.vantrantrucphuong.quanlyhocphi.Model.Subject;
 import com.example.vantrantrucphuong.quanlyhocphi.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.vantrantrucphuong.quanlyhocphi.R.id.lvDM;
@@ -46,11 +49,8 @@ public class SubjectList extends AppCompatActivity {
         setAdapter();
         registerForContextMenu(lvSubject);
     }
-//
-//    public void display(){
-//        adapter=new SubjectAdapter(this, subjectModify.getAllSubject(),true);
-//        lvDM.setAdapter(adapter);
-//    }
+
+
 
 
     private void setAdapter() {

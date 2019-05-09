@@ -1,44 +1,61 @@
 package com.example.vantrantrucphuong.quanlyhocphi.Model;
 
 /**
- * Created by Tran Thanh Loc on 5/1/2019.
+ * Created by Van Tran Truc Phuong on 5/1/2019.
  */
 
 public class Invoice {
-    private String invoiceNumber;
-    private String date;
-    private String sudent_id;
+    private int id;
+    private String invoice_id;
+    private String invoice_date;
+    private String invoice_student;
 
-    public Invoice(String invoiceNumber, String date, String sudent_id) {
-        this.invoiceNumber = invoiceNumber;
-        this.date = date;
-        this.sudent_id = sudent_id;
-    }
 
     public Invoice() {
     }
 
-    public String getInvoiceNumber() {
-        return invoiceNumber;
+    public Invoice(int id, String invoice_id, String invoice_date, String invoice_student) {
+        this.id = id;
+        this.invoice_id = invoice_id;
+        this.invoice_date = invoice_date;
+        this.invoice_student = invoice_student;
     }
 
-    public void setInvoiceNumber(String invoiceNumber) {
-        this.invoiceNumber = invoiceNumber;
+    public Invoice(String invoice_id, String invoice_date, String invoice_student) {
+        this.invoice_id = invoice_id;
+        this.invoice_date = invoice_date;
+        this.invoice_student = invoice_student;
     }
 
-    public String getDate() {
-        return date;
+    public int getId() {
+        return id;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getSudent_id() {
-        return sudent_id;
+    public String getInvoice_id() {
+        return invoice_id;
     }
 
-    public void setSudent_id(String sudent_id) {
-        this.sudent_id = sudent_id;
+    public void setInvoice_id(String invoice_id) {
+        this.invoice_id = invoice_id;
+    }
+
+    public String getInvoice_date() {
+        return invoice_date;
+    }
+
+    public void setInvoice_date(String invoice_date) {
+        this.invoice_date = invoice_date;
+    }
+
+    public String getInvoice_student() {
+        return invoice_student;
+    }
+
+    public void setInvoice_student(String invoice_student) {
+        this.invoice_student = invoice_student;
     }
 }

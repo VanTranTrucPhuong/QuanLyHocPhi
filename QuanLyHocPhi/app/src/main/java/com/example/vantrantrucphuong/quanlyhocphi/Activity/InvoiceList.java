@@ -1,8 +1,6 @@
 package com.example.vantrantrucphuong.quanlyhocphi.Activity;
 
 import android.app.Dialog;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,20 +16,22 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.vantrantrucphuong.quanlyhocphi.Adapter.InvoiceAdapter;
+import com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper;
 import com.example.vantrantrucphuong.quanlyhocphi.Database.InvoiceModify;
-import com.example.vantrantrucphuong.quanlyhocphi.Model.Invoice;;
-import com.example.vantrantrucphuong.quanlyhocphi.Model.Student;
+import com.example.vantrantrucphuong.quanlyhocphi.Model.Invoice;
 import com.example.vantrantrucphuong.quanlyhocphi.R;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import static com.example.vantrantrucphuong.quanlyhocphi.R.id.listViewInvoice;
 
 public class InvoiceList extends AppCompatActivity {
+
     InvoiceModify invoiceModify;
-    InvoiceAdapter invoiceAdapter;
-    ListView lvHD;
-    private ArrayList<Invoice> invoiceList;
-
-
+    private ListView lvInvoice;
+    private DBHelper dbHelper;
+    private InvoiceAdapter customAdapter;
+    private List<Invoice> invoiceList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,52 +39,44 @@ public class InvoiceList extends AppCompatActivity {
         setContentView(R.layout.activity_invoice);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        lvInvoice = (ListView) findViewById(listViewInvoice);
 
-        lvHD=(ListView)findViewById(R.id.listView);
-        invoiceModify = new InvoiceModify(this);
-        invoiceList = invoiceModify.getAllInvoice();
+        invoiceModify=new InvoiceModify(this);
+        invoiceList = invoiceModify.getAll();
         setAdapter();
-        registerForContextMenu(lvHD);
+        registerForContextMenu(lvInvoice);
     }
+
+    private void setAdapter() {
+        if (customAdapter == null) {
+            customAdapter = new InvoiceAdapter(this, R.layout.item_list_invoice, invoiceList);
+            lvInvoice.setAdapter(customAdapter);
+        }else{
+            customAdapter.notifyDataSetChanged();
+            lvInvoice.setSelection(customAdapter.getCount()-1);
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
-    private void setAdapter() {
-        if (invoiceAdapter == null) {
-            invoiceAdapter = new InvoiceAdapter(this, R.layout.item_list_invoice, invoiceList);
-            lvHD.setAdapter(invoiceAdapter);
-        }else{
-            invoiceAdapter.notifyDataSetChanged();
-            lvHD.setSelection(invoiceAdapter.getCount()-1);
-        }
-    }
-
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater menuInflater=getMenuInflater();
-        menuInflater.inflate(R.menu.context_menu,menu);
-    }
-
-    //add item
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
         if (id == R.id.action_new) {
             final Dialog dialog=new Dialog(this);
-            dialog.setTitle("Thêm mới hóa đơn");
+            dialog.setTitle("Thêm mới môn học");
             dialog.setContentView(R.layout.dialog_add_invoice);
-            final EditText edtInvoiceNumber, edtDate, edtStudentID;
+            final EditText edtID, edtDate, edtStudent;
             Button btnCancel, btnInsert;
 
-            edtInvoiceNumber=(EditText) dialog.findViewById(R.id.edtMaHoadon);
+            edtID=(EditText) dialog.findViewById(R.id.edtMaHoadon);
             edtDate=(EditText) dialog.findViewById(R.id.edtNgay);
-            edtStudentID=(EditText) dialog.findViewById(R.id.edtMaSV);
+            edtStudent=(EditText) dialog.findViewById(R.id.edtMaSV);
 
             btnCancel=(Button) dialog.findViewById(R.id.btnCancel);
             btnInsert=(Button) dialog.findViewById(R.id.btnUpdate);
@@ -99,15 +91,16 @@ public class InvoiceList extends AppCompatActivity {
             btnInsert.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Invoice invoice = new Invoice(edtInvoiceNumber.getText().toString(),edtDate.getText().toString(), edtStudentID.getText().toString());
+                    Invoice invoice = new Invoice(edtID.getText().toString(),edtDate.getText().toString(), edtStudent.getText().toString());
                     if (invoice != null) {
-                        invoiceModify.addInvoice(invoice);
+                        invoiceModify.add(invoice);
                     }
                     updateListInvoice();
                     setAdapter();
                     dialog.dismiss();
                 }
             });
+
             dialog.show();
             return true;
         }
@@ -117,24 +110,34 @@ public class InvoiceList extends AppCompatActivity {
 
     public void updateListInvoice(){
         invoiceList.clear();
-        invoiceList.addAll(invoiceModify.getAllInvoice());
-        if(invoiceAdapter!= null){
-            invoiceAdapter.notifyDataSetChanged();
+        invoiceList.addAll(invoiceModify.getAll());
+        if(customAdapter!= null){
+            customAdapter.notifyDataSetChanged();
         }
     }
+
+    //ContextMenu
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater menuInflater=getMenuInflater();
+        menuInflater.inflate(R.menu.context_menu,menu);
+    }
+
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info=(AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-        Invoice invoiceItem = (Invoice) invoiceAdapter.getItem(info.position);
-        final String id = invoiceItem.getInvoiceNumber();
+        Invoice invoiceItem = (Invoice) customAdapter.getItem(info.position);
+        final int id = invoiceItem.getId();
 
-        Toast.makeText(this, (lvHD.getItemAtPosition(info.position)).toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, (lvInvoice.getItemAtPosition(info.position)).toString(), Toast.LENGTH_SHORT).show();
 
         switch (item.getItemId()){
             case R.id.action_delete:
                 Toast.makeText(this, String.valueOf(id), Toast.LENGTH_SHORT).show();
-                int result = invoiceModify.deleteInvoice(id);
+                int result = invoiceModify.delete(id);
                 if(result>0){
                     Toast.makeText(this,"Xóa thành công", Toast.LENGTH_SHORT).show();
                     updateListInvoice();
@@ -144,22 +147,22 @@ public class InvoiceList extends AppCompatActivity {
                 return true;
             case R.id.action_edit:
                 final Dialog dialog = new Dialog(this);
-                dialog.setTitle("Cập nhật Hóa đơn");
+                dialog.setTitle("Cập nhật môn học");
                 dialog.setContentView(R.layout.dialog_add_invoice);
-                final EditText edtInvoiceNumber, edtDate, edtStudentID;
+                final EditText edtID, edtDate, edtStudent;
                 Button btnCancel, btnUpdate;
 
-                edtInvoiceNumber=(EditText) dialog.findViewById(R.id.edtMaHoadon);
+                edtID=(EditText) dialog.findViewById(R.id.edtMaHoadon);
                 edtDate=(EditText) dialog.findViewById(R.id.edtNgay);
-                edtStudentID=(EditText) dialog.findViewById(R.id.edtMaSV);
+                edtStudent=(EditText) dialog.findViewById(R.id.edtMaSV);
 
                 btnCancel=(Button) dialog.findViewById(R.id.btnCancel);
                 btnUpdate=(Button) dialog.findViewById(R.id.btnUpdate);
 
-                Invoice invoice=invoiceModify.fetchInvoicetByID(id);
-                edtInvoiceNumber.setText(invoice.getInvoiceNumber());
-                edtDate.setText(invoice.getDate());
-                edtStudentID.setText(invoice.getSudent_id());
+                Invoice invoice=invoiceModify.fetchByID(id);
+                edtID.setText(invoice.getInvoice_id());
+                edtDate.setText(invoice.getInvoice_date());
+                edtStudent.setText(invoice.getInvoice_student());
 
                 btnCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -171,15 +174,10 @@ public class InvoiceList extends AppCompatActivity {
                 btnUpdate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Invoice invoice = new Invoice(edtInvoiceNumber.getText().toString(), edtDate.getText().toString(), edtStudentID.getText().toString());
-//                        subjectModify.updateSubject(subject);
-//                        setAdapter();
-//                        updateListSubject();
-
-                        int result = invoiceModify.updateInvoice(invoice);
+                        Invoice invoice = new Invoice(id, edtID.getText().toString(), edtDate.getText().toString(), edtStudent.getText().toString());
+                        int result = invoiceModify.update(invoice);
                         Toast.makeText(InvoiceList.this, "ID update: " + String.valueOf(id), Toast.LENGTH_SHORT).show();
                         if(result > 0){
-//                            subjectModify.updateSubject(subject);
                             updateListInvoice();
                         }
                         else {
@@ -188,11 +186,11 @@ public class InvoiceList extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 });
+
                 dialog.show();
                 return true;
         }
+
         return super.onContextItemSelected(item);
     }
-
-
 }

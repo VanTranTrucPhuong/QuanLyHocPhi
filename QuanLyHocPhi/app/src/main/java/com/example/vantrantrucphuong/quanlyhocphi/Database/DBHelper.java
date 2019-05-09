@@ -11,11 +11,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
-//    DATABASE_NAME
+    //    DATABASE_NAME
     private static final String DATABASE_NAME = "db_student";
     public static String TAG = "DBManager";
 
-//    TABLE_STUDENT
+    //    TABLE_STUDENT
     public static final String TABLE_NAME = "student";
     public static final String KEY_ID = "_id";
     public static final String KEY_NAME = "name";
@@ -24,9 +24,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //    TABLE BIENLAIHOCPHI
     public static final String TABLE_NAME_INVOICE = "invoice";
+    public static final String KEY_INVOICE_ORDER = "_id";
     public static final String KEY_ID_INVOICE = "invoice_id";
-    public static final String KEY_ID_STUDENT = "student_id";
-    public static final String KEY_DATE = "date";
+    public static final String KEY_STUDENT_INVOICE = "invoice_student";
+    public static final String KEY_DATE_INVOICE = "invoice_date";
 
     //    TABLE THONGTINBIENLAI
     public static final String TABLE_NAME_INFOR = "information";
@@ -34,7 +35,7 @@ public class DBHelper extends SQLiteOpenHelper {
     //    public static final String KEY_ID_STUDENT = "student_id";
     public static final String KEY_COST = "cost";
 
-//    TABLE MONHOC
+    //    TABLE MONHOC
     public static final String TABLE_NAME_SUB = "subject";
     public static final String KEY_SUB_ORDER = "_id";
     public static final String KEY_ID_SUB = "sub_id";
@@ -45,7 +46,7 @@ public class DBHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-//    Table Create Statements
+    //    Table Create Statements
 //    Student table create statement
     public static final String CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_NAME + " ("
             + KEY_ID + " TEXT PRIMARY KEY NOT NULL,"
@@ -61,9 +62,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //Invoice table create statement
     private static final String CREATE_TABLE_INVOICE= "CREATE TABLE " + TABLE_NAME_INVOICE + " ("
-            + KEY_ID_INVOICE + " TEXT PRIMARY KEY NOT NULL,"
-            + KEY_DATE + " TEXT,"
-            + KEY_ID_STUDENT+ " TEXT)";
+            + KEY_INVOICE_ORDER + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+            + KEY_ID_INVOICE + " TEXT ,"
+            + KEY_DATE_INVOICE + " TEXT,"
+            + KEY_STUDENT_INVOICE + " TEXT)";
+
     //    Information of invoice
     private static final String CREATE_TABLE_INFOR= "CREATE TABLE " + TABLE_NAME_INFOR + " ("
             + KEY_ID_INVOICE + " TEXT PRIMARY KEY NOT NULL,"

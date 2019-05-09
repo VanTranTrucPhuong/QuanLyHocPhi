@@ -1,6 +1,5 @@
 package com.example.vantrantrucphuong.quanlyhocphi.Adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -11,52 +10,50 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import com.example.vantrantrucphuong.quanlyhocphi.Model.Invoice;
 import com.example.vantrantrucphuong.quanlyhocphi.R;
 
-public class InvoiceAdapter extends ArrayAdapter<Invoice>{
-    private Context context;
-    private int layoutResourceId;
-    private ArrayList<Invoice> listInvoice = null;
+import java.util.List;
 
-    public InvoiceAdapter(@NonNull Context context, @LayoutRes int layoutResourceId,@NonNull ArrayList<Invoice>objects){
-        super(context, layoutResourceId, objects);
-        this.context = context;
-        this.layoutResourceId = layoutResourceId;
-        this.listInvoice = objects;
+public class InvoiceAdapter extends ArrayAdapter<Invoice> {
+
+    private Context context;
+    private int resoure;
+    private List<Invoice> listInvoice;
+
+    public InvoiceAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Invoice> objects) {
+        super(context, resource, objects);
+        this.context= context;
+        this.resoure=resource;
+        this.listInvoice=objects;
     }
 
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull  ViewGroup parent){
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ViewHolder viewHolder;
-        if(convertView == null){
+        if(convertView==null){
             convertView = LayoutInflater.from(context).inflate(R.layout.item_list_invoice,parent,false);
             viewHolder = new ViewHolder();
-            viewHolder.tvNumber = (TextView) convertView.findViewById(R.id.txtInvoiceNumber);
-            viewHolder.tvDate = (TextView) convertView.findViewById(R.id.txtStudentID);
-            viewHolder.tvStudentID = (TextView) convertView.findViewById(R.id.txtDate);
+            viewHolder.tvId = (TextView)convertView.findViewById(R.id.txtInvoiceNumber);
+            viewHolder.tvDate = (TextView)convertView.findViewById(R.id.txtDate);
+            viewHolder.tvStudent = (TextView)convertView.findViewById(R.id.txtStudentID);
 
-        }
-        else {
+            convertView.setTag(viewHolder);
+        }else{
             viewHolder = (ViewHolder) convertView.getTag();
         }
         Invoice invoice = listInvoice.get(position);
-        viewHolder.tvNumber.setText(invoice.getInvoiceNumber());
-        viewHolder.tvDate.setText(invoice.getDate());
-        viewHolder.tvStudentID.setText(invoice.getSudent_id());
+        viewHolder.tvId.setText(String.valueOf(invoice.getInvoice_id()));
+        viewHolder.tvDate.setText(invoice.getInvoice_date());
+        viewHolder.tvStudent.setText(invoice.getInvoice_student());
 
         return convertView;
     }
-    public class ViewHolder {
-        private  TextView tvNumber;
+
+    public class ViewHolder{
+
+        private TextView tvId;
         private TextView tvDate;
-        private TextView tvStudentID;
+        private TextView tvStudent;
     }
-
-
 }
-
-
-

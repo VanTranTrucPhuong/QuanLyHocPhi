@@ -19,16 +19,19 @@ import android.widget.Toast;
 
 import com.example.vantrantrucphuong.quanlyhocphi.Adapter.StudentAdapter;
 import com.example.vantrantrucphuong.quanlyhocphi.Database.StudentModify;
+import com.example.vantrantrucphuong.quanlyhocphi.Model.Invoice;
 import com.example.vantrantrucphuong.quanlyhocphi.Model.Student;
 import com.example.vantrantrucphuong.quanlyhocphi.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class StudentList extends AppCompatActivity {
 
     StudentModify studentModify;
     StudentAdapter adapter;
     ListView lvDS;
-    public String masv;
-
+    private List<Student> studentList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +42,21 @@ public class StudentList extends AppCompatActivity {
 
         lvDS=(ListView)findViewById(R.id.lvDS);
         studentModify=new StudentModify(this);
+
         display();
         registerForContextMenu(lvDS);
         setEvent();
 
     }
+//    public void display2(){
+//        ArrayList<Invoice> mArrayList = new ArrayList<Invoice>();
+//        Cursor cursor = studentModify.getStudentList();
+//        cursor.moveToFirst();
+//        while(!mCursor.isAfterLast()) {
+//            mArrayList.add(mCursor.getString(mCursor.getColumnIndex(dbAdapter.KEY_NAME))); //add the item
+//            mCursor.moveToNext();
+//        }
+//    }
 
     public void display(){
         adapter=new StudentAdapter(this, studentModify.getStudentList(),true);
@@ -53,10 +66,13 @@ public class StudentList extends AppCompatActivity {
         lvDS.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                String masoSV= studentModify.getStudentList().get(i);
                 Intent intent = new Intent(getApplicationContext(), InvoiceList.class);
                 startActivity(intent);
             }
         });
+
+
     }
 
 
@@ -69,9 +85,6 @@ public class StudentList extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -129,7 +142,6 @@ public class StudentList extends AppCompatActivity {
 
         Cursor cursor=(Cursor) lvDS.getItemAtPosition(info.position);
         final String id = cursor.getString(0);
-        masv= id; //luu de load cai hoa don
 
         switch (item.getItemId()){
             case R.id.action_delete:

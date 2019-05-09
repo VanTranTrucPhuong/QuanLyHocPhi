@@ -20,7 +20,7 @@
             android:textSize="16dp"
             android:gravity="center|left"
             android:layout_weight="1.75"
-            android:text="@string/maHoadon"
+            android:text="Mã HĐ:  "
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:id="@+id/textView2"/>
