@@ -131,7 +131,7 @@ public class InvoiceList extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info=(AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
         Invoice invoiceItem = (Invoice) customAdapter.getItem(info.position);
-        final int id = invoiceItem.getId();
+        final String id = invoiceItem.getInvoice_id();
 
         Toast.makeText(this, (lvInvoice.getItemAtPosition(info.position)).toString(), Toast.LENGTH_SHORT).show();
 
@@ -175,7 +175,7 @@ public class InvoiceList extends AppCompatActivity {
                 btnUpdate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Invoice invoice = new Invoice(id, edtID.getText().toString(), edtDate.getText().toString(), edtStudent.getText().toString());
+                        Invoice invoice = new Invoice( edtID.getText().toString(), edtDate.getText().toString(), edtStudent.getText().toString());
                         int result = invoiceModify.update(invoice);
                         Toast.makeText(InvoiceList.this, "ID update: " + String.valueOf(id), Toast.LENGTH_SHORT).show();
                         if(result > 0){

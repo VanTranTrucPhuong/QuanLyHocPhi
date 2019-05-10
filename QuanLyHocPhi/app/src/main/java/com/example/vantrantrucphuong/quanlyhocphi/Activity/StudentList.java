@@ -57,6 +57,8 @@ public class StudentList extends AppCompatActivity {
         lvDS.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                Student student= lvDS.get;
+//                Toast.makeText(StudentList.this, student.getStudent_id().toString(), Toast.LENGTH_SHORT).show();
 //                Toast.makeText(getApplicationContext(),
 //                        "Click ListItem Number " + i, Toast.LENGTH_LONG)
 //                        .show();

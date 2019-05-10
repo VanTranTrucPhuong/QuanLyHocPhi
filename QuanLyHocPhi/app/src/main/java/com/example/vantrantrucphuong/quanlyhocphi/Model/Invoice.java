@@ -5,7 +5,7 @@ package com.example.vantrantrucphuong.quanlyhocphi.Model;
  */
 
 public class Invoice {
-    private int id;
+//    private int id;
     private String invoice_id;
     private String invoice_date;
     private String invoice_student;
@@ -14,25 +14,10 @@ public class Invoice {
     public Invoice() {
     }
 
-    public Invoice(int id, String invoice_id, String invoice_date, String invoice_student) {
-        this.id = id;
-        this.invoice_id = invoice_id;
-        this.invoice_date = invoice_date;
-        this.invoice_student = invoice_student;
-    }
-
     public Invoice(String invoice_id, String invoice_date, String invoice_student) {
         this.invoice_id = invoice_id;
         this.invoice_date = invoice_date;
         this.invoice_student = invoice_student;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getInvoice_id() {

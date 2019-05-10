@@ -12,7 +12,7 @@ import com.example.vantrantrucphuong.quanlyhocphi.Model.Subject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper.KEY_INVOICE_ORDER;
+import static com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper.KEY_ID_INVOICE;
 import static com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper.TABLE_NAME_INVOICE;
 
 /**
@@ -49,10 +49,9 @@ public class InvoiceModify {
         if (cursor.moveToFirst()) {
             do {
                 Invoice invoice = new Invoice();
-                invoice.setId(cursor.getInt(0));
-                invoice.setInvoice_id(cursor.getString(1));
-                invoice.setInvoice_date(cursor.getString(2)+"");
-                invoice.setInvoice_student(cursor.getString(3));
+                invoice.setInvoice_id(cursor.getString(0));
+                invoice.setInvoice_date(cursor.getString(1)+"");
+                invoice.setInvoice_student(cursor.getString(2));
                 listInvoice.add(invoice);
 
             } while (cursor.moveToNext());
@@ -64,28 +63,27 @@ public class InvoiceModify {
     public int update(Invoice invoice){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DBHelper.KEY_INVOICE_ORDER,invoice.getId());
         contentValues.put(DBHelper.KEY_ID_INVOICE,invoice.getInvoice_id());
         contentValues.put(DBHelper.KEY_DATE_INVOICE,invoice.getInvoice_date());
         contentValues.put(DBHelper.KEY_STUDENT_INVOICE,invoice.getInvoice_student());
 
-        return db.update(TABLE_NAME_INVOICE,contentValues,KEY_INVOICE_ORDER+"=?",new String[]{String.valueOf(invoice.getId())});
+        return db.update(TABLE_NAME_INVOICE,contentValues,KEY_ID_INVOICE+"=?",new String[]{String.valueOf(invoice.getInvoice_id())});
     }
 
-    public int delete(int invoice_id){
+    public int delete(String invoice_id){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        return db.delete(TABLE_NAME_INVOICE,KEY_INVOICE_ORDER+"=?",new String[] {String.valueOf(invoice_id)});
+        return db.delete(TABLE_NAME_INVOICE,KEY_ID_INVOICE+"=?",new String[] {String.valueOf(invoice_id)});
     }
 
 
     //Lay 1 du lieu
-    public Invoice fetchByID(int invoice_id){
+    public Invoice fetchByID(String invoice_id){
         SQLiteDatabase db= dbHelper.getReadableDatabase();
-        Cursor cursor= db.query(TABLE_NAME_INVOICE,new String[]{DBHelper.KEY_INVOICE_ORDER,DBHelper.KEY_ID_INVOICE,DBHelper.KEY_DATE_INVOICE,DBHelper.KEY_STUDENT_INVOICE},DBHelper.KEY_INVOICE_ORDER+"=?",new String[]{String.valueOf(invoice_id)},null,null,null);
+        Cursor cursor= db.query(TABLE_NAME_INVOICE,new String[]{DBHelper.KEY_ID_INVOICE,DBHelper.KEY_DATE_INVOICE,DBHelper.KEY_STUDENT_INVOICE},DBHelper.KEY_ID_INVOICE+"=?",new String[]{String.valueOf(invoice_id)},null,null,null);
         if(cursor!=null){
             cursor.moveToFirst();
         }
-        return new Invoice(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3));
+        return new Invoice(cursor.getString(0),cursor.getString(1),cursor.getString(2));
     }
 
 
