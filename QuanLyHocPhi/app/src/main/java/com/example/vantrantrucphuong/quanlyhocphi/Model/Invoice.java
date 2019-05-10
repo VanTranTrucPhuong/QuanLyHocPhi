@@ -12,6 +12,7 @@ public class Invoice {
 
 
     public Invoice() {
+         String invoice_id;
     }
 
     public Invoice(String invoice_id, String invoice_date, String invoice_student) {
