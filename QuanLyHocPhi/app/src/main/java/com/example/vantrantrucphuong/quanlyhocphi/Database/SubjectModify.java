@@ -49,10 +49,6 @@ public class SubjectModify {
         if (cursor.moveToFirst()) {
             do {
                 Subject subject = new Subject();
-//                subject.setId(cursor.getInt(0));
-//                subject.setSubject_id(cursor.getString(1));
-//                subject.setSubjectName(cursor.getString(2)+"");
-//                subject.setCreditNumber(cursor.getString(3));
                 subject.setSubject_id(cursor.getString(0));
                 subject.setSubjectName(cursor.getString(1)+"");
                 subject.setCreditNumber(cursor.getString(2));
@@ -67,8 +63,6 @@ public class SubjectModify {
     public int updateSubject(Subject subject){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-
-//        contentValues.put(DBHelper.KEY_SUB_ORDER,subject.getId());
         contentValues.put(DBHelper.KEY_ID_SUB,subject.getSubject_id());
         contentValues.put(DBHelper.KEY_NAME_SUB,subject.getSubjectName());
         contentValues.put(DBHelper.KEY_CREDITNUMBER,subject.getCreditNumber());

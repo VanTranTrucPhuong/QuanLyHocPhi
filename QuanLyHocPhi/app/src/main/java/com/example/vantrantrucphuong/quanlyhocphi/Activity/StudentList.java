@@ -16,9 +16,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.vantrantrucphuong.quanlyhocphi.Adapter.InvoiceAdapter;
 import com.example.vantrantrucphuong.quanlyhocphi.Adapter.StudentAdapter;
 import com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper;
+import com.example.vantrantrucphuong.quanlyhocphi.Database.InvoiceModify;
 import com.example.vantrantrucphuong.quanlyhocphi.Database.StudentModify;
+import com.example.vantrantrucphuong.quanlyhocphi.Model.Invoice;
 import com.example.vantrantrucphuong.quanlyhocphi.Model.Student;
 import com.example.vantrantrucphuong.quanlyhocphi.R;
 
@@ -36,6 +39,13 @@ public class StudentList extends AppCompatActivity {
     private DBHelper dbHelper;
     private StudentAdapter customAdapter;
     private List<Student> studentList;
+    public static String masoSinhVien = "";
+
+    InvoiceModify invoiceModify;
+    InvoiceList invoiceListmain;
+    private ListView lvInvoice;
+    private List<Invoice> invoiceList;
+    public String masv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,15 +66,17 @@ public class StudentList extends AppCompatActivity {
         lvStudent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
                 Student studentItem = (Student) customAdapter.getItem(i);
                 final String id = studentItem.getStudent_id();
-                
                 Toast.makeText(StudentList.this, "ID: " + id, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), InvoiceList.class);
+
+                intent.putExtra(masoSinhVien,id);
+                startActivity(intent);
+
             }
         });
     }
-
 
     private void setAdapter() {
         if (customAdapter == null) {
@@ -85,15 +97,11 @@ public class StudentList extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_new) {
             final Dialog dialog=new Dialog(this);
-            dialog.setTitle("Thêm mới môn học");
+            dialog.setTitle("Thêm mới Sinh viên");
             dialog.setContentView(R.layout.dialog_add_student);
             final EditText edtNameSt, edtIDSt, edtPhoneNumber;
             Button btnCancel, btnInsert;
@@ -146,7 +154,7 @@ public class StudentList extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater menuInflater=getMenuInflater();
-        menuInflater.inflate(R.menu.context_menu,menu);
+        menuInflater.inflate(R.menu.menu_student,menu);
     }
 
     @Override
@@ -160,6 +168,7 @@ public class StudentList extends AppCompatActivity {
 //        final int id = 2;
 
         switch (item.getItemId()){
+
             case R.id.action_delete:
                 Toast.makeText(this, String.valueOf(id), Toast.LENGTH_SHORT).show();
                 int result = studentModify.deleteStudent(id);
@@ -199,14 +208,9 @@ public class StudentList extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Student Student = new Student(edtIDSt.getText().toString(), edtNameSt.getText().toString(), edtPhoneNumber.getText().toString());
-//                        StudentModify.updateStudent(Student);
-//                        setAdapter();
-//                        updateListStudent();
-
                         int result = studentModify.updateStudent(Student);
                         Toast.makeText(StudentList.this, "ID update: " + String.valueOf(edtIDSt.getText().toString()), Toast.LENGTH_SHORT).show();
                         if(result > 0){
-//                            StudentModify.updateStudent(Student);
                             updateListStudent();
                         }
                         else {
@@ -217,6 +221,45 @@ public class StudentList extends AppCompatActivity {
                 });
 
                 dialog.show();
+                return true;
+//                THÊM MOI HOA DON O MAN HINH STUDENT
+            case R.id.action_ivoice:
+                final Dialog dialogPlus=new Dialog(this);
+                dialogPlus.setTitle("Thêm Hóa Đơn");
+                dialogPlus.setContentView(R.layout.dialog_add_infor);
+                final EditText edtID, edtDate, edtStudent;
+                Button btnInsert;
+                edtID=(EditText) dialogPlus.findViewById(R.id.edtInvoiceID);
+                edtDate=(EditText) dialogPlus.findViewById(R.id.edtDate);
+                edtStudent=(EditText) dialogPlus.findViewById(R.id.edtStudentID);
+
+                btnCancel=(Button) dialogPlus.findViewById(R.id.btnCancel);
+                btnInsert=(Button) dialogPlus.findViewById(R.id.btnUpdate);
+
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogPlus.dismiss();
+                    }
+                });
+
+                btnInsert.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Invoice invoice = new Invoice(edtID.getText().toString(),edtDate.getText().toString(), edtStudent.getText().toString());
+                        if (invoice != null) {
+                            invoiceModify.add(invoice);
+                        }
+                        else {
+                            return ;
+                        }
+                        invoiceListmain.updateListInvoice();
+                        setAdapter();
+                        dialogPlus.dismiss();
+                    }
+                });
+
+                dialogPlus.show();
                 return true;
         }
 

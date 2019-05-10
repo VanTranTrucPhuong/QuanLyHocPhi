@@ -27,13 +27,15 @@
     <!--<string name="action_new">Thêm mới</string>-->
     <!--<string name="app_name">QLSV</string>-->
     <string name="action_new">Thêm mới</string>
-    <string name="action_edit">Sửa</string>
+    <string name="action_invoice">Thêm Hóa Đơn</string>
+    <string name="action_edit">Sửa Thông Tin</string>
     <string name="action_delete">Xóa</string>
 
     <!--thêm môn học-->
     <string name="tenMH">Tên MH: </string>
     <string name="maMH">Mã MH: </string>
     <string name="soTC">Số TC: </string>
+    <string name="soTien">Số Tiền: </string>
 
     <!--thêm hóa đơn-->
     <string name="maHoadon">Mã HĐ:  </string>

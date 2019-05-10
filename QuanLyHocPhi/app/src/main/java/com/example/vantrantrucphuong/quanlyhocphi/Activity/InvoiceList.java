@@ -1,6 +1,7 @@
 package com.example.vantrantrucphuong.quanlyhocphi.Activity;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -32,7 +33,8 @@ public class InvoiceList extends AppCompatActivity {
     private DBHelper dbHelper;
     private InvoiceAdapter customAdapter;
     private List<Invoice> invoiceList;
-    String masv= "SV02";
+    public String masv;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +43,9 @@ public class InvoiceList extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         lvInvoice = (ListView) findViewById(listViewInvoice);
-
         invoiceModify=new InvoiceModify(this);
+        Intent intent = getIntent();
+        masv= intent.getStringExtra(StudentList.masoSinhVien);
         invoiceList = invoiceModify.getAll(masv);
         setAdapter();
         registerForContextMenu(lvInvoice);
@@ -70,7 +73,7 @@ public class InvoiceList extends AppCompatActivity {
 
         if (id == R.id.action_new) {
             final Dialog dialog=new Dialog(this);
-            dialog.setTitle("Thêm mới môn học");
+            dialog.setTitle("Thêm mới");
             dialog.setContentView(R.layout.dialog_add_invoice);
             final EditText edtID, edtDate, edtStudent;
             Button btnCancel, btnInsert;
@@ -136,6 +139,8 @@ public class InvoiceList extends AppCompatActivity {
         Toast.makeText(this, (lvInvoice.getItemAtPosition(info.position)).toString(), Toast.LENGTH_SHORT).show();
 
         switch (item.getItemId()){
+
+
             case R.id.action_delete:
                 Toast.makeText(this, String.valueOf(id), Toast.LENGTH_SHORT).show();
                 int result = invoiceModify.delete(id);

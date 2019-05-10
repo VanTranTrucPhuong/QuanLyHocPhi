@@ -12,27 +12,12 @@ public class Subject {
 
     public Subject(){};
 
-//    public Subject(int _id, String subject_id, String subjectName, String creditNumber) {
-//        this.id = _id;
-//        this.subject_id = subject_id;
-//        this.subjectName = subjectName;
-//        this.creditNumber = creditNumber;
-//    }
 
     public Subject(String subject_id, String subjectName, String creditNumber) {
-//        this.id = _id;
         this.subject_id = subject_id;
         this.subjectName = subjectName;
         this.creditNumber = creditNumber;
     }
-
-//    public int getId() {
-//        return id;
-//    }
-//
-//    public void setId(int id) {
-//        this.id = id;
-//    }
 
     public String getSubject_id() {
         return subject_id;
