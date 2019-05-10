@@ -32,7 +32,7 @@ public class InvoiceList extends AppCompatActivity {
     private DBHelper dbHelper;
     private InvoiceAdapter customAdapter;
     private List<Invoice> invoiceList;
-    String masv= "SV01";
+    String masv= "SV02";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

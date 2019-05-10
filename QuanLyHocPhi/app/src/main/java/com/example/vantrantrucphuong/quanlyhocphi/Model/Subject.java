@@ -5,19 +5,19 @@ package com.example.vantrantrucphuong.quanlyhocphi.Model;
  */
 
 public class Subject {
-    private int id;
+//    private int id;
     private String subject_id;
     private String subjectName;
     private String creditNumber;
 
     public Subject(){};
 
-    public Subject(int _id, String subject_id, String subjectName, String creditNumber) {
-        this.id = _id;
-        this.subject_id = subject_id;
-        this.subjectName = subjectName;
-        this.creditNumber = creditNumber;
-    }
+//    public Subject(int _id, String subject_id, String subjectName, String creditNumber) {
+//        this.id = _id;
+//        this.subject_id = subject_id;
+//        this.subjectName = subjectName;
+//        this.creditNumber = creditNumber;
+//    }
 
     public Subject(String subject_id, String subjectName, String creditNumber) {
 //        this.id = _id;
@@ -26,13 +26,13 @@ public class Subject {
         this.creditNumber = creditNumber;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+//    public int getId() {
+//        return id;
+//    }
+//
+//    public void setId(int id) {
+//        this.id = id;
+//    }
 
     public String getSubject_id() {
         return subject_id;

@@ -140,7 +140,8 @@ public class SubjectList extends AppCompatActivity {
 
         Subject subjectItem = (Subject) customAdapter.getItem(info.position);
 //        Cursor cursor=(Cursor) lvSubject.getItemAtPosition(info.position);
-        final int id = subjectItem.getId();
+//        final int id = subjectItem.getId();
+        final String id = subjectItem.getSubject_id();
 
         Toast.makeText(this, (lvSubject.getItemAtPosition(info.position)).toString(), Toast.LENGTH_SHORT).show();
 //        final int id = 2;
@@ -184,7 +185,7 @@ public class SubjectList extends AppCompatActivity {
                 btnUpdate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Subject subject = new Subject(id, edtIDSub.getText().toString(), edtNameSub.getText().toString(), edtCreditNumber.getText().toString());
+                        Subject subject = new Subject( edtIDSub.getText().toString(), edtNameSub.getText().toString(), edtCreditNumber.getText().toString());
 //                        subjectModify.updateSubject(subject);
 //                        setAdapter();
 //                        updateListSubject();

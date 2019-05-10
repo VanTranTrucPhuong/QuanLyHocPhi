@@ -57,8 +57,10 @@ public class StudentList extends AppCompatActivity {
         lvDS.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                int itemPosition = i;
-//                String itemValue = (String) lvDS.getItemAtPosition(i);
+//                Toast.makeText(getApplicationContext(),
+//                        "Click ListItem Number " + i, Toast.LENGTH_LONG)
+//                        .show();
+//                String itemValue = (String) studentList.get(i).getStudent_id();
 //                Toast.makeText(
 //                        getApplicationContext(),
 //                        "Position :" + itemPosition + " ListItem: " + itemValue,
@@ -66,7 +68,7 @@ public class StudentList extends AppCompatActivity {
 //                ).show();
 //                String masinhvien="";
 //                String masinhvien =  studentList.get(i).getStudent_id();
-                Toast.makeText(StudentList.this, String.valueOf(itemPosition) , Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), i, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), InvoiceList.class);
                 startActivity(intent);
             }
