@@ -4,76 +4,85 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.vantrantrucphuong.quanlyhocphi.Model.Student;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper.KEY_ID;
+import static com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper.TABLE_NAME;
 
 /**
  * Created by Van Tran Truc Phuong on 5/1/2019.
  */
-public class StudentModify {
+public class StudentModify{
+    private final String TAG = "DBManager";
     private DBHelper dbHelper;
 
     public StudentModify(Context context) {
         dbHelper= new DBHelper(context);
     }
 
-    //PT Them
-    public void insert(Student student){
-        //Mo ket noi den Database
+    public void addStudent(Student student) {
         SQLiteDatabase db= dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(DBHelper.KEY_ID,student.getStudent_id());
+//        values.put(DBHelper.KEY_SUB_ORDER, Student.getId());
+        values.put(DBHelper.KEY_ID, student.getStudent_id());
         values.put(DBHelper.KEY_NAME, student.getName());
         values.put(DBHelper.KEY_PHONE, student.getPhoneNumber());
 
-        db.insert(DBHelper.TABLE_NAME,null,values);
+        db.insert(TABLE_NAME,null,values);
         db.close();
+        Log.d(TAG, "addStudent Successfuly");
     }
 
-    //PT Sua
-    public void update(Student student){
-        //Mo ket noi den Database
-        SQLiteDatabase db= dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
+    public List<Student> getAllStudent() {
+        List<Student> listStudent = new ArrayList<>();
 
-        values.put(DBHelper.KEY_ID,student.getStudent_id());
-        values.put(DBHelper.KEY_NAME, student.getName());
-        values.put(DBHelper.KEY_PHONE, student.getPhoneNumber());
+        String selectQuery = "SELECT * FROM " + TABLE_NAME;
 
-        db.update(DBHelper.TABLE_NAME,values, DBHelper.KEY_ID+ "=?",new String[]{student.getStudent_id()});
-        db.close();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery,null);
+        if (cursor.moveToFirst()) {
+            do {
+                Student student = new Student();;
+                student.setStudent_id(cursor.getString(0));
+                student.setName(cursor.getString(1)+"");
+                student.setPhoneNumber(cursor.getString(2));
+                listStudent.add(student);
 
-    }
-
-    //PT xoa
-    public void delete(String student_id){
-        //Mo ket noi den Database
-        SQLiteDatabase db= dbHelper.getWritableDatabase();
-        db.delete(DBHelper.TABLE_NAME,DBHelper.KEY_ID+"=?",new String[]{student_id});
-        db.close();
-    }
-
-
-    //lay tat ca du lieu trong bang
-    public Cursor getStudentList(){
-        SQLiteDatabase db= dbHelper.getReadableDatabase();
-        Cursor cursor= db.query(DBHelper.TABLE_NAME,new String[]{DBHelper.KEY_ID,DBHelper.KEY_NAME,DBHelper.KEY_PHONE},null,null,null,null,null);
-        if(cursor!=null){
-            cursor.moveToFirst();
+            } while (cursor.moveToNext());
         }
-        return cursor;
+        db.close();
+        return listStudent;
     }
+
+    public int updateStudent(Student student){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DBHelper.KEY_ID,student.getStudent_id());
+        contentValues.put(DBHelper.KEY_NAME,student.getName());
+        contentValues.put(DBHelper.KEY_PHONE,student.getPhoneNumber());
+
+        return db.update(TABLE_NAME,contentValues,KEY_ID+"=?",new String[]{String.valueOf(student.getStudent_id())});
+    }
+
+    public int deleteStudent(String student_id){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        return db.delete(TABLE_NAME, KEY_ID+"=?",new String[] {student_id});
+    }
+
 
     //Lay 1 du lieu
     public Student fetchStudentByID(String student_id){
         SQLiteDatabase db= dbHelper.getReadableDatabase();
-        Cursor cursor= db.query(DBHelper.TABLE_NAME,new String[]{DBHelper.KEY_ID,DBHelper.KEY_NAME,DBHelper.KEY_PHONE},DBHelper.KEY_ID+"=?",new String[]{String.valueOf(student_id)},null,null,null);
+        Cursor cursor= db.query(TABLE_NAME,new String[]{KEY_ID,DBHelper.KEY_NAME,DBHelper.KEY_PHONE}, KEY_ID+"=?",new String[]{student_id},null,null,null);
         if(cursor!=null){
             cursor.moveToFirst();
         }
         return new Student(cursor.getString(0),cursor.getString(1),cursor.getString(2));
     }
-
 }

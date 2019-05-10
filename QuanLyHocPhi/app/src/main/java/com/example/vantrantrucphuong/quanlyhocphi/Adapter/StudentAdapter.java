@@ -1,40 +1,59 @@
 package com.example.vantrantrucphuong.quanlyhocphi.Adapter;
 
 import android.content.Context;
-import android.database.Cursor;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CursorAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.example.vantrantrucphuong.quanlyhocphi.Model.Student;
 import com.example.vantrantrucphuong.quanlyhocphi.R;
 
-/**
- * Created by Van Tran Truc Phuong on 5/1/2019.
- */
+import java.util.List;
 
+public class StudentAdapter extends ArrayAdapter<Student> {
 
-public class StudentAdapter extends CursorAdapter {
-    public StudentAdapter(Context context, Cursor c, boolean autoRequery) {
-        super(context, c, autoRequery);
+    private Context context;
+    private int resoure;
+    private List<Student> listStudent;
+
+    public StudentAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Student> objects) {
+        super(context, resource, objects);
+        this.context= context;
+        this.resoure=resource;
+        this.listStudent=objects;
     }
 
     @Override
-    public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        View view= LayoutInflater.from(context).inflate(R.layout.item_list_student,parent,false);
-        return view;
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        ViewHolder viewHolder;
+        if(convertView==null){
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_list_student,parent,false);
+            viewHolder = new ViewHolder();
+            viewHolder.tvId = (TextView)convertView.findViewById(R.id.txtStID);
+            viewHolder.tvName = (TextView)convertView.findViewById(R.id.txtStName);
+            viewHolder.tvPhoneNumber = (TextView)convertView.findViewById(R.id.txtStPhoneNumber);
+
+            convertView.setTag(viewHolder);
+        }else{
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+        Student student = listStudent.get(position);
+        viewHolder.tvId.setText(String.valueOf(student.getStudent_id()));
+        viewHolder.tvName.setText(student.getName());
+        viewHolder.tvPhoneNumber.setText(student.getPhoneNumber());
+
+        return convertView;
     }
 
-    @Override
-    public void bindView(View view, Context context, Cursor cursor) {
-        TextView txtName, txtID, txtPhoneNumber;
-        txtName=(TextView)view.findViewById(R.id.txtStName);
-        txtID=(TextView)view.findViewById(R.id.txtStID);
-        txtPhoneNumber=(TextView)view.findViewById(R.id.txtStPhoneNumber);
+    public class ViewHolder{
 
-        txtID.setText(cursor.getString(0));
-        txtName.setText(cursor.getString(1));
-        txtPhoneNumber.setText(cursor.getString(2));
+        private TextView tvId;
+        private TextView tvName;
+        private TextView tvPhoneNumber;
     }
 }

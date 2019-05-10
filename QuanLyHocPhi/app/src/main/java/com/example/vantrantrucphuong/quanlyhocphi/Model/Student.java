@@ -15,6 +15,10 @@ public class Student {
         this.phoneNumber = phoneNumber;
     }
 
+    public Student() {
+    }
+
+
     public String getStudent_id() {
         return student_id;
     }
