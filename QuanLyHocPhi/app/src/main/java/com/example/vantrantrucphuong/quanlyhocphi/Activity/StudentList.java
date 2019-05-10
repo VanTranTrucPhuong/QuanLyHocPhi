@@ -1,8 +1,10 @@
 package com.example.vantrantrucphuong.quanlyhocphi.Activity;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
@@ -123,13 +125,24 @@ public class StudentList extends AppCompatActivity {
             btnInsert.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Student Student = new Student(edtIDSt.getText().toString(),edtNameSt.getText().toString(), edtPhoneNumber.getText().toString());
-                    if (Student != null) {
-                        studentModify.addStudent(Student);
+                    Student student = new Student(edtIDSt.getText().toString(),edtNameSt.getText().toString(), edtPhoneNumber.getText().toString());
+                    boolean flag = true;
+                    for(int i = 0; i < studentList.size(); i++){
+                        if(student.getStudent_id().equals(studentList.get(i).getStudent_id())){
+                            flag = false;
+                        }
                     }
-                    updateListStudent();
-                    setAdapter();
-                    dialog.dismiss();
+                    if (flag == false) {
+                        Toast.makeText(StudentList.this, "Mã sinh viên này đã tồn tại !!!", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        if(student != null){
+                            studentModify.addStudent(student);
+                        }
+                        updateListStudent();
+                        setAdapter();
+                        dialog.dismiss();
+                    }
                 }
             });
 
@@ -161,23 +174,38 @@ public class StudentList extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info=(AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         Student studentItem = (Student) customAdapter.getItem(info.position);
-//        Cursor cursor=(Cursor) lvStudent.getItemAtPosition(info.position);
         final String id = studentItem.getStudent_id();
 
         Toast.makeText(this, (lvStudent.getItemAtPosition(info.position)).toString(), Toast.LENGTH_SHORT).show();
-//        final int id = 2;
 
         switch (item.getItemId()){
 
             case R.id.action_delete:
                 Toast.makeText(this, String.valueOf(id), Toast.LENGTH_SHORT).show();
-                int result = studentModify.deleteStudent(id);
-                if(result>0){
-                    Toast.makeText(this,"Xóa thành công", Toast.LENGTH_SHORT).show();
-                    updateListStudent();
-                }else{
-                    Toast.makeText(this, "Xóa thất bại", Toast.LENGTH_SHORT).show();
-                }
+
+                final AlertDialog.Builder builder = new AlertDialog.Builder(StudentList.this);
+                builder.setTitle("Xác nhận");
+                builder.setMessage("Bạn có muốn xóa sản phẩm này không?");
+                builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        int result = studentModify.deleteStudent(id);
+                        if(result>0){
+                            Toast.makeText(getApplicationContext(),"Xóa thành công", Toast.LENGTH_SHORT).show();
+                            updateListStudent();
+                        }else{
+                            Toast.makeText(getApplicationContext(), "Xóa thất bại", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                builder.show();
+
                 return true;
             case R.id.action_edit:
                 final Dialog dialog = new Dialog(this);
@@ -196,6 +224,8 @@ public class StudentList extends AppCompatActivity {
                 edtIDSt.setText(student.getStudent_id());
                 edtPhoneNumber.setText(student.getPhoneNumber());
                 edtNameSt.setText(student.getName());
+
+                edtIDSt.setEnabled(false);
 
                 btnCancel.setOnClickListener(new View.OnClickListener() {
                     @Override

@@ -1,8 +1,9 @@
 package com.example.vantrantrucphuong.quanlyhocphi.Activity;
 
 import android.app.Dialog;
-import android.database.Cursor;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
@@ -19,11 +20,9 @@ import android.widget.Toast;
 import com.example.vantrantrucphuong.quanlyhocphi.Adapter.SubjectAdapter;
 import com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper;
 import com.example.vantrantrucphuong.quanlyhocphi.Database.SubjectModify;
-import com.example.vantrantrucphuong.quanlyhocphi.Model.Invoice;
 import com.example.vantrantrucphuong.quanlyhocphi.Model.Subject;
 import com.example.vantrantrucphuong.quanlyhocphi.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.vantrantrucphuong.quanlyhocphi.R.id.lvDM;
@@ -98,12 +97,23 @@ public class SubjectList extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Subject subject = new Subject(edtIDSub.getText().toString(),edtNameSub.getText().toString(), edtCreditNumber.getText().toString());
-                    if (subject != null) {
-                        subjectModify.addSubject(subject);
+                    boolean flag = true;
+                    for(int i = 0; i < subjectList.size(); i++){
+                        if(subject.getSubject_id().equals(subjectList.get(i).getSubject_id())){
+                            flag = false;
+                        }
                     }
-                    updateListSubject();
-                    setAdapter();
-                    dialog.dismiss();
+                    if (flag == false) {
+                        Toast.makeText(SubjectList.this, "Mã môn học này đã tồn tại !!!", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        if(subject != null){
+                            subjectModify.addSubject(subject);
+                        }
+                        updateListSubject();
+                        setAdapter();
+                        dialog.dismiss();
+                    }
                 }
             });
 
@@ -136,23 +146,37 @@ public class SubjectList extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info=(AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
         Subject subjectItem = (Subject) customAdapter.getItem(info.position);
-//        Cursor cursor=(Cursor) lvSubject.getItemAtPosition(info.position);
-//        final int id = subjectItem.getId();
         final String id = subjectItem.getSubject_id();
 
         Toast.makeText(this, (lvSubject.getItemAtPosition(info.position)).toString(), Toast.LENGTH_SHORT).show();
-//        final int id = 2;
 
         switch (item.getItemId()){
             case R.id.action_delete:
                 Toast.makeText(this, String.valueOf(id), Toast.LENGTH_SHORT).show();
-                int result = subjectModify.deleteSubject(id);
-                if(result>0){
-                    Toast.makeText(this,"Xóa thành công", Toast.LENGTH_SHORT).show();
-                    updateListSubject();
-                }else{
-                    Toast.makeText(this, "Xóa thất bại", Toast.LENGTH_SHORT).show();
-                }
+                final AlertDialog.Builder builder = new AlertDialog.Builder(SubjectList.this);
+                builder.setTitle("Xác nhận");
+                builder.setMessage("Bạn có muốn xóa sản phẩm này không?");
+                builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        int result = subjectModify.deleteSubject(id);
+                        if(result>0){
+                            Toast.makeText(getApplicationContext(),"Xóa thành công", Toast.LENGTH_SHORT).show();
+                            updateListSubject();
+                        }else{
+                            Toast.makeText(getApplicationContext(), "Xóa thất bại", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                builder.show();
+
+
                 return true;
             case R.id.action_edit:
                 final Dialog dialog = new Dialog(this);
@@ -171,6 +195,8 @@ public class SubjectList extends AppCompatActivity {
                 edtIDSub.setText(subject.getSubject_id());
                 edtCreditNumber.setText(subject.getCreditNumber());
                 edtNameSub.setText(subject.getSubjectName());
+
+                edtIDSub.setEnabled(false);
 
                 btnCancel.setOnClickListener(new View.OnClickListener() {
                     @Override

@@ -54,7 +54,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     // Subject table create statement
     public static final String CREATE_TABLE_SUBJECT = "CREATE TABLE " + TABLE_NAME_SUB + " ("
-
             + KEY_ID_SUB + " VARCHAR(10) PRIMARY KEY NOT NULL,"
             + KEY_NAME_SUB + " TEXT,"
             + KEY_CREDITNUMBER + " TEXT)";
