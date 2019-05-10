@@ -40,10 +40,9 @@ public class InvoiceModify {
         Log.d(TAG, " Successfuly");
     }
 
-    public List<Invoice> getAll() {
+    public List<Invoice> getAll(String masv) {
         List<Invoice> listInvoice = new ArrayList<>();
-
-        String selectQuery = "SELECT * FROM " + TABLE_NAME_INVOICE +" WHERE  "+DBHelper.KEY_STUDENT_INVOICE+" = 'SV01'";
+        String selectQuery = "SELECT * FROM " + TABLE_NAME_INVOICE +" WHERE  "+DBHelper.KEY_STUDENT_INVOICE +" = '"+ masv +"' "  ;
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery,null);

@@ -32,6 +32,7 @@ public class InvoiceList extends AppCompatActivity {
     private DBHelper dbHelper;
     private InvoiceAdapter customAdapter;
     private List<Invoice> invoiceList;
+    String masv= "SV01";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class InvoiceList extends AppCompatActivity {
         lvInvoice = (ListView) findViewById(listViewInvoice);
 
         invoiceModify=new InvoiceModify(this);
-        invoiceList = invoiceModify.getAll();
+        invoiceList = invoiceModify.getAll(masv);
         setAdapter();
         registerForContextMenu(lvInvoice);
     }
@@ -110,7 +111,7 @@ public class InvoiceList extends AppCompatActivity {
 
     public void updateListInvoice(){
         invoiceList.clear();
-        invoiceList.addAll(invoiceModify.getAll());
+        invoiceList.addAll(invoiceModify.getAll(masv));
         if(customAdapter!= null){
             customAdapter.notifyDataSetChanged();
         }

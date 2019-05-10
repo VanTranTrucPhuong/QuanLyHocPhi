@@ -51,8 +51,6 @@ public class SubjectList extends AppCompatActivity {
     }
 
 
-
-
     private void setAdapter() {
         if (customAdapter == null) {
             customAdapter = new SubjectAdapter(this, R.layout.item_list_subject, subjectList);

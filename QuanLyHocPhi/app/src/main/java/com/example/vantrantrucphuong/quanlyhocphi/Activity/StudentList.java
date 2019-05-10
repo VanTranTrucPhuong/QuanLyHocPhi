@@ -48,15 +48,6 @@ public class StudentList extends AppCompatActivity {
         setEvent();
 
     }
-//    public void display2(){
-//        ArrayList<Invoice> mArrayList = new ArrayList<Invoice>();
-//        Cursor cursor = studentModify.getStudentList();
-//        cursor.moveToFirst();
-//        while(!mCursor.isAfterLast()) {
-//            mArrayList.add(mCursor.getString(mCursor.getColumnIndex(dbAdapter.KEY_NAME))); //add the item
-//            mCursor.moveToNext();
-//        }
-//    }
 
     public void display(){
         adapter=new StudentAdapter(this, studentModify.getStudentList(),true);
@@ -66,13 +57,20 @@ public class StudentList extends AppCompatActivity {
         lvDS.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                String masoSV= studentModify.getStudentList().get(i);
+                int itemPosition = i;
+//                String itemValue = (String) lvDS.getItemAtPosition(i);
+//                Toast.makeText(
+//                        getApplicationContext(),
+//                        "Position :" + itemPosition + " ListItem: " + itemValue,
+//                        Toast.LENGTH_LONG
+//                ).show();
+//                String masinhvien="";
+//                String masinhvien =  studentList.get(i).getStudent_id();
+                Toast.makeText(StudentList.this, String.valueOf(itemPosition) , Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), InvoiceList.class);
                 startActivity(intent);
             }
         });
-
-
     }
 
 
