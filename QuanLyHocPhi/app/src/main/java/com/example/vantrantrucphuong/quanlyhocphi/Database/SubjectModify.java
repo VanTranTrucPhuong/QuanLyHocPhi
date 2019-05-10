@@ -91,6 +91,9 @@ public class SubjectModify {
         if(cursor!=null){
             cursor.moveToFirst();
         }
+        else{
+            return null;
+        }
 //        return new Subject(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3));
         return new Subject(cursor.getString(0),cursor.getString(1),cursor.getString(2));
     }

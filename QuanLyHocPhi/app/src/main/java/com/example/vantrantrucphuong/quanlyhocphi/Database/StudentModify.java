@@ -79,10 +79,21 @@ public class StudentModify{
     //Lay 1 du lieu
     public Student fetchStudentByID(String student_id){
         SQLiteDatabase db= dbHelper.getReadableDatabase();
+        Student student = new Student();
         Cursor cursor= db.query(TABLE_NAME,new String[]{KEY_ID,DBHelper.KEY_NAME,DBHelper.KEY_PHONE}, KEY_ID+"=?",new String[]{student_id},null,null,null);
         if(cursor!=null){
             cursor.moveToFirst();
+            student = new Student(cursor.getString(0),cursor.getString(1),cursor.getString(2));
         }
-        return new Student(cursor.getString(0),cursor.getString(1),cursor.getString(2));
+        else{
+            student = null;
+        }
+        return student;
     }
+
+
+    /**
+     * getting all tags
+     * */
+
 }
