@@ -2,7 +2,6 @@ package com.example.vantrantrucphuong.quanlyhocphi.Activity;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,19 +17,24 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.vantrantrucphuong.quanlyhocphi.Adapter.StudentAdapter;
+import com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper;
 import com.example.vantrantrucphuong.quanlyhocphi.Database.StudentModify;
-import com.example.vantrantrucphuong.quanlyhocphi.Model.Invoice;
 import com.example.vantrantrucphuong.quanlyhocphi.Model.Student;
 import com.example.vantrantrucphuong.quanlyhocphi.R;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.vantrantrucphuong.quanlyhocphi.R.id.edtID;
+import static com.example.vantrantrucphuong.quanlyhocphi.R.id.edtName;
+import static com.example.vantrantrucphuong.quanlyhocphi.R.id.edtPhone;
+import static com.example.vantrantrucphuong.quanlyhocphi.R.id.lvDS;
 
 public class StudentList extends AppCompatActivity {
 
     StudentModify studentModify;
-    StudentAdapter adapter;
-    ListView lvDS;
+    private ListView lvStudent;
+    private DBHelper dbHelper;
+    private StudentAdapter customAdapter;
     private List<Student> studentList;
 
     @Override
@@ -39,44 +43,38 @@ public class StudentList extends AppCompatActivity {
         setContentView(R.layout.activity_student_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        lvStudent = (ListView) findViewById(lvDS);
 
-        lvDS=(ListView)findViewById(R.id.lvDS);
-        studentModify=new StudentModify(this);
-
-        display();
-        registerForContextMenu(lvDS);
-        setEvent();
-
+        studentModify = new StudentModify(this);
+        studentList = studentModify.getAllStudent();
+        setAdapter();
+        setEventClickItem();
+        registerForContextMenu(lvStudent);
     }
 
-    public void display(){
-        adapter=new StudentAdapter(this, studentModify.getStudentList(),true);
-        lvDS.setAdapter(adapter);
-    }
-    private void setEvent() {
-        lvDS.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    private void setEventClickItem() {
+        lvStudent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Student student= lvDS.get;
-//                Toast.makeText(StudentList.this, student.getStudent_id().toString(), Toast.LENGTH_SHORT).show();
-//                Toast.makeText(getApplicationContext(),
-//                        "Click ListItem Number " + i, Toast.LENGTH_LONG)
-//                        .show();
-//                String itemValue = (String) studentList.get(i).getStudent_id();
-//                Toast.makeText(
-//                        getApplicationContext(),
-//                        "Position :" + itemPosition + " ListItem: " + itemValue,
-//                        Toast.LENGTH_LONG
-//                ).show();
-//                String masinhvien="";
-//                String masinhvien =  studentList.get(i).getStudent_id();
-//                Toast.makeText(getApplicationContext(), i, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), InvoiceList.class);
-                startActivity(intent);
+
+                Student studentItem = (Student) customAdapter.getItem(i);
+                final String id = studentItem.getStudent_id();
+                
+                Toast.makeText(StudentList.this, "ID: " + id, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+
+    private void setAdapter() {
+        if (customAdapter == null) {
+            customAdapter = new StudentAdapter(this, R.layout.item_list_student, studentList);
+            lvStudent.setAdapter(customAdapter);
+        }else{
+            customAdapter.notifyDataSetChanged();
+            lvStudent.setSelection(customAdapter.getCount()-1);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -87,19 +85,22 @@ public class StudentList extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_new) {
             final Dialog dialog=new Dialog(this);
-            dialog.setTitle("Thêm mới sinh viên");
+            dialog.setTitle("Thêm mới môn học");
             dialog.setContentView(R.layout.dialog_add_student);
-            final EditText edtName, edtID, edtPhone;
+            final EditText edtNameSt, edtIDSt, edtPhoneNumber;
             Button btnCancel, btnInsert;
 
-            edtName=(EditText) dialog.findViewById(R.id.edtName);
-            edtID=(EditText) dialog.findViewById(R.id.edtID);
-            edtPhone=(EditText) dialog.findViewById(R.id.edtPhone);
+            edtNameSt=(EditText) dialog.findViewById(edtName);
+            edtIDSt=(EditText) dialog.findViewById(edtID);
+            edtPhoneNumber=(EditText) dialog.findViewById(edtPhone);
 
             btnCancel=(Button) dialog.findViewById(R.id.btnCancel);
             btnInsert=(Button) dialog.findViewById(R.id.btnUpdate);
@@ -114,10 +115,12 @@ public class StudentList extends AppCompatActivity {
             btnInsert.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Student student=new Student(edtID.getText().toString(),edtName.getText().toString(), edtPhone.getText().toString());
-                    Toast.makeText(StudentList.this, student.getStudent_id().toString(), Toast.LENGTH_SHORT).show();
-                    studentModify.insert(student);
-                    display();
+                    Student Student = new Student(edtIDSt.getText().toString(),edtNameSt.getText().toString(), edtPhoneNumber.getText().toString());
+                    if (Student != null) {
+                        studentModify.addStudent(Student);
+                    }
+                    updateListStudent();
+                    setAdapter();
                     dialog.dismiss();
                 }
             });
@@ -127,6 +130,14 @@ public class StudentList extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void updateListStudent(){
+        studentList.clear();
+        studentList.addAll(studentModify.getAllStudent());
+        if(customAdapter!= null){
+            customAdapter.notifyDataSetChanged();
+        }
     }
 
     //ContextMenu
@@ -141,33 +152,41 @@ public class StudentList extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info=(AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        Student studentItem = (Student) customAdapter.getItem(info.position);
+//        Cursor cursor=(Cursor) lvStudent.getItemAtPosition(info.position);
+        final String id = studentItem.getStudent_id();
 
-        Cursor cursor=(Cursor) lvDS.getItemAtPosition(info.position);
-        final String id = cursor.getString(0);
+        Toast.makeText(this, (lvStudent.getItemAtPosition(info.position)).toString(), Toast.LENGTH_SHORT).show();
+//        final int id = 2;
 
         switch (item.getItemId()){
             case R.id.action_delete:
-                studentModify.delete(id);
-                Toast.makeText(this,"Xóa thành công", Toast.LENGTH_SHORT).show();
-                display();
+                Toast.makeText(this, String.valueOf(id), Toast.LENGTH_SHORT).show();
+                int result = studentModify.deleteStudent(id);
+                if(result>0){
+                    Toast.makeText(this,"Xóa thành công", Toast.LENGTH_SHORT).show();
+                    updateListStudent();
+                }else{
+                    Toast.makeText(this, "Xóa thất bại", Toast.LENGTH_SHORT).show();
+                }
                 return true;
             case R.id.action_edit:
                 final Dialog dialog = new Dialog(this);
-                dialog.setTitle("Cập nhật sinh viên");
+                dialog.setTitle("Cập nhật môn học");
                 dialog.setContentView(R.layout.dialog_add_student);
-                final EditText edtName, edtID, edtPhone;
+                final EditText edtNameSt, edtIDSt, edtPhoneNumber;
                 Button btnCancel, btnUpdate;
 
-                edtName=(EditText) dialog.findViewById(R.id.edtName);
-                edtID=(EditText) dialog.findViewById(R.id.edtID);
-                edtPhone=(EditText) dialog.findViewById(R.id.edtPhone);
+                edtNameSt = (EditText) dialog.findViewById(edtName);
+                edtIDSt =(EditText) dialog.findViewById(edtID);
+                edtPhoneNumber=(EditText) dialog.findViewById(edtPhone);
                 btnCancel=(Button) dialog.findViewById(R.id.btnCancel);
                 btnUpdate=(Button) dialog.findViewById(R.id.btnUpdate);
 
-                Student student=studentModify.fetchStudentByID(id);
-                edtID.setText(student.getStudent_id());
-                edtPhone.setText(student.getPhoneNumber());
-                edtName.setText(student.getName());
+                Student student = studentModify.fetchStudentByID(id);
+                edtIDSt.setText(student.getStudent_id());
+                edtPhoneNumber.setText(student.getPhoneNumber());
+                edtNameSt.setText(student.getName());
 
                 btnCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -179,9 +198,20 @@ public class StudentList extends AppCompatActivity {
                 btnUpdate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Student student=new Student(edtID.getText().toString(), edtName.getText().toString(), edtPhone.getText().toString());
-                        studentModify.update(student);
-                        display();
+                        Student Student = new Student(edtIDSt.getText().toString(), edtNameSt.getText().toString(), edtPhoneNumber.getText().toString());
+//                        StudentModify.updateStudent(Student);
+//                        setAdapter();
+//                        updateListStudent();
+
+                        int result = studentModify.updateStudent(Student);
+                        Toast.makeText(StudentList.this, "ID update: " + String.valueOf(edtIDSt.getText().toString()), Toast.LENGTH_SHORT).show();
+                        if(result > 0){
+//                            StudentModify.updateStudent(Student);
+                            updateListStudent();
+                        }
+                        else {
+                            Toast.makeText(StudentList.this, "Update thất bại", Toast.LENGTH_SHORT).show();
+                        }
                         dialog.dismiss();
                     }
                 });

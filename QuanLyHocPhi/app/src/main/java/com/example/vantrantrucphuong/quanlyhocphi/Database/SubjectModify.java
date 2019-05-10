@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper.KEY_ID_SUB;
-import static com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper.KEY_CREDITNUMBER;
 import static com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper.TABLE_NAME_SUB;
 
 /**
@@ -31,7 +30,7 @@ public class SubjectModify {
         ContentValues values = new ContentValues();
 
 //        values.put(DBHelper.KEY_SUB_ORDER, subject.getId());
-        values.put(DBHelper.KEY_ID_SUB, subject.getSubject_id());
+        values.put(KEY_ID_SUB, subject.getSubject_id());
         values.put(DBHelper.KEY_NAME_SUB, subject.getSubjectName());
         values.put(DBHelper.KEY_CREDITNUMBER, subject.getCreditNumber());
 
@@ -68,12 +67,14 @@ public class SubjectModify {
     public int updateSubject(Subject subject){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+
 //        contentValues.put(DBHelper.KEY_SUB_ORDER,subject.getId());
         contentValues.put(DBHelper.KEY_ID_SUB,subject.getSubject_id());
         contentValues.put(DBHelper.KEY_NAME_SUB,subject.getSubjectName());
         contentValues.put(DBHelper.KEY_CREDITNUMBER,subject.getCreditNumber());
 
         return db.update(TABLE_NAME_SUB,contentValues,KEY_ID_SUB+"=?",new String[]{String.valueOf(subject.getSubject_id())}); //thay dooi
+
     }
 
     public int deleteSubject(String subject_id){
@@ -86,14 +87,13 @@ public class SubjectModify {
     public Subject fetchSubjectByID(String subject_id){
         SQLiteDatabase db= dbHelper.getReadableDatabase();
         Cursor cursor= db.query(TABLE_NAME_SUB,new String[]{DBHelper.KEY_ID_SUB,DBHelper.KEY_NAME_SUB,DBHelper.KEY_CREDITNUMBER},DBHelper.KEY_ID_SUB+"=?",new String[]{String.valueOf(subject_id)},null,null,null);
+
         if(cursor!=null){
             cursor.moveToFirst();
         }
 //        return new Subject(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3));
         return new Subject(cursor.getString(0),cursor.getString(1),cursor.getString(2));
     }
-
-
 
 
 }

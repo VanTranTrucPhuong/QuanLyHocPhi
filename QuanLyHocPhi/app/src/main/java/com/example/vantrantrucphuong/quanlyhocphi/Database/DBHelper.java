@@ -37,7 +37,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //    TABLE MONHOC
     public static final String TABLE_NAME_SUB = "subject";
-    public static final String KEY_SUB_ORDER = "_id";
     public static final String KEY_ID_SUB = "sub_id";
     public static final String KEY_NAME_SUB = "sub_name";
     public static final String KEY_CREDITNUMBER = "sub_creditnumber";
@@ -55,7 +54,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     // Subject table create statement
     public static final String CREATE_TABLE_SUBJECT = "CREATE TABLE " + TABLE_NAME_SUB + " ("
-//            + KEY_SUB_ORDER + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+
             + KEY_ID_SUB + " VARCHAR(10) PRIMARY KEY NOT NULL,"
             + KEY_NAME_SUB + " TEXT,"
             + KEY_CREDITNUMBER + " TEXT)";

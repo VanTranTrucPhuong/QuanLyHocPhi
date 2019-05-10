@@ -17,7 +17,6 @@ public class Student {
 
     public Student() {
     }
-
     public String getStudent_id() {
         return student_id;
     }
