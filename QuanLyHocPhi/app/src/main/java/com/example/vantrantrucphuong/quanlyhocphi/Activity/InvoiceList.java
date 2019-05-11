@@ -318,7 +318,7 @@ public class InvoiceList extends AppCompatActivity {
                         Invoice_Info info = new Invoice_Info( edtInvoiceID.getText().toString(), edtMaMH.getText().toString(), edtMoney.getText().toString());
 
                         if(info != null){
-                            inforModify.add( new Invoice_Info( edtInvoiceID.getText().toString(), edtMaMH.getText().toString(), edtMoney.getText().toString()));
+//                            inforModify( new Invoice_Info( edtInvoiceID.getText().toString(), edtMaMH.getText().toString(), edtMoney.getText().toString()));
                             Toast.makeText(InvoiceList.this, info.getInvoice_id() , Toast.LENGTH_SHORT).show();
 //                            Toast.makeText(InvoiceList.this,  edtMaMH.getText().toString(), Toast.LENGTH_SHORT).show();
 //                            Toast.makeText(InvoiceList.this, edtMoney.getText().toString(), Toast.LENGTH_SHORT).show();
