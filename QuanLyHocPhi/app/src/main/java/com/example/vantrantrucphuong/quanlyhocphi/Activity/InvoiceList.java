@@ -22,8 +22,10 @@ import android.widget.Toast;
 
 import com.example.vantrantrucphuong.quanlyhocphi.Adapter.InvoiceAdapter;
 import com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper;
+import com.example.vantrantrucphuong.quanlyhocphi.Database.InforModify;
 import com.example.vantrantrucphuong.quanlyhocphi.Database.InvoiceModify;
 import com.example.vantrantrucphuong.quanlyhocphi.Database.SubjectModify;
+import com.example.vantrantrucphuong.quanlyhocphi.Model.Infor;
 import com.example.vantrantrucphuong.quanlyhocphi.Model.Invoice;
 import com.example.vantrantrucphuong.quanlyhocphi.Model.Subject;
 import com.example.vantrantrucphuong.quanlyhocphi.R;
@@ -38,6 +40,7 @@ public class InvoiceList extends AppCompatActivity {
 
     InvoiceModify invoiceModify;
     SubjectModify subjectModify;
+    InforModify inforModify;
     private ListView lvInvoice;
     private DBHelper dbHelper;
     private InvoiceAdapter customAdapter;
@@ -62,6 +65,8 @@ public class InvoiceList extends AppCompatActivity {
         subjectModify=new SubjectModify(this);
         subjectList = subjectModify.getAllSubject();
 //                End Spinner MÔN HÓC
+
+        inforModify = new InforModify(this);
         setAdapter();
         registerForContextMenu(lvInvoice);
     }
@@ -276,7 +281,8 @@ public class InvoiceList extends AppCompatActivity {
                 btnInsert.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        Infor infor = new Infor(edtInvoiceID.getText().toString(), edtMaMH.getText().toString(), edtMoney.getText().toString());
+                        inforModify.addDetail(infor);
                         dialogPlus.dismiss();
                     }
                 });
