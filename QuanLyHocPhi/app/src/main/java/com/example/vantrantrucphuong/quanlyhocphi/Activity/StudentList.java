@@ -58,6 +58,7 @@ public class StudentList extends AppCompatActivity {
         lvStudent = (ListView) findViewById(lvDS);
 
         studentModify = new StudentModify(this);
+        invoiceModify=new InvoiceModify(this);
         studentList = studentModify.getAllStudent();
         setAdapter();
         setEventClickItem();
@@ -209,7 +210,7 @@ public class StudentList extends AppCompatActivity {
                 return true;
             case R.id.action_edit:
                 final Dialog dialog = new Dialog(this);
-                dialog.setTitle("Cập nhật môn học");
+                dialog.setTitle("Cập nhật thông tin");
                 dialog.setContentView(R.layout.dialog_add_student);
                 final EditText edtNameSt, edtIDSt, edtPhoneNumber;
                 Button btnCancel, btnUpdate;
@@ -263,6 +264,9 @@ public class StudentList extends AppCompatActivity {
                 edtDate=(EditText) dialogPlus.findViewById(R.id.edtDate);
                 edtStudent=(EditText) dialogPlus.findViewById(R.id.edtStudentID);
 
+                edtStudent.setText(id);
+                edtStudent.setEnabled(false);
+
                 btnCancel=(Button) dialogPlus.findViewById(R.id.btnCancel);
                 btnInsert=(Button) dialogPlus.findViewById(R.id.btnUpdate);
 
@@ -283,7 +287,7 @@ public class StudentList extends AppCompatActivity {
                         else {
                             return ;
                         }
-                        invoiceListmain.updateListInvoice();
+//                        invoiceListmain.updateListInvoice();
                         setAdapter();
                         dialogPlus.dismiss();
                     }
@@ -295,4 +299,5 @@ public class StudentList extends AppCompatActivity {
 
         return super.onContextItemSelected(item);
     }
+
 }

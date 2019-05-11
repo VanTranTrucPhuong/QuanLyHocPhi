@@ -67,9 +67,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //    Information of invoice
     private static final String CREATE_TABLE_INFOR= "CREATE TABLE " + TABLE_NAME_INFOR + " ("
-            + KEY_ID_INVOICE + " TEXT PRIMARY KEY NOT NULL,"
-            + KEY_ID_SUB + " TEXT,"
-            + KEY_COST + " TEXT)";
+            + KEY_ID_INVOICE + " TEXT  NOT NULL,"
+            + KEY_ID_SUB + " TEXT NOT NULL,"
+            + KEY_COST + " TEXT,"
+            + "PRIMARY KEY ( " +KEY_ID_INVOICE+ " , " +KEY_ID_SUB+"))";
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_STUDENT);
