@@ -43,6 +43,7 @@ public class InvoiceModify {
         List<Invoice> listInvoice = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_NAME_INVOICE +" WHERE  "+DBHelper.KEY_STUDENT_INVOICE +" = '"+ masv +"' "  ;
 
+
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery,null);
         if (cursor.moveToFirst()) {
@@ -52,7 +53,6 @@ public class InvoiceModify {
                 invoice.setInvoice_date(cursor.getString(1)+"");
                 invoice.setInvoice_student(cursor.getString(2));
                 listInvoice.add(invoice);
-
             } while (cursor.moveToNext());
         }
         db.close();

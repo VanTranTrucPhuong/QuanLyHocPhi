@@ -332,6 +332,12 @@ public class StudentList extends AppCompatActivity {
                         dialogPlus.dismiss();
                     }
                 });
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogPlus.dismiss();
+                    }
+                });
 
                 dialogPlus.show();
                 return true;

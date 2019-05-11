@@ -27,6 +27,7 @@ import com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper;
 import com.example.vantrantrucphuong.quanlyhocphi.Database.InforModify;
 import com.example.vantrantrucphuong.quanlyhocphi.Database.InvoiceModify;
 import com.example.vantrantrucphuong.quanlyhocphi.Database.SubjectModify;
+import com.example.vantrantrucphuong.quanlyhocphi.Model.Infor;
 import com.example.vantrantrucphuong.quanlyhocphi.Model.Invoice;
 import com.example.vantrantrucphuong.quanlyhocphi.Model.Invoice_Info;
 import com.example.vantrantrucphuong.quanlyhocphi.Model.Subject;
@@ -46,11 +47,13 @@ public class InvoiceList extends AppCompatActivity {
     InvoiceModify invoiceModify;
     InforModify inforModify; //thong tin hoa don
     SubjectModify subjectModify;
+//    InforModify inforModify;
     private ListView lvInvoice;
     private DBHelper dbHelper;
     private InvoiceAdapter customAdapter;
     private List<Invoice> invoiceList;
     private List<Subject> subjectList;
+    private List<Infor> inforSubList; //LIST CAC MON HOC THEO HOA DON
     public String masv;
 
 
@@ -62,14 +65,18 @@ public class InvoiceList extends AppCompatActivity {
         setSupportActionBar(toolbar);
         lvInvoice = (ListView) findViewById(listViewInvoice);
         invoiceModify = new InvoiceModify(this);
+
         Intent intent = getIntent();
         masv= intent.getStringExtra(StudentList.masoSinhVien);
-        invoiceList = invoiceModify.getAll(masv);
 
-        //                Spinner MÔN HỌC
+        invoiceList = invoiceModify.getAll(masv);
         subjectModify=new SubjectModify(this);
         subjectList = subjectModify.getAllSubject();
-//                End Spinner MÔN HÓC
+
+
+        inforModify = new InforModify(this);
+
+
         setAdapter();
         registerForContextMenu(lvInvoice);
     }
@@ -84,11 +91,11 @@ public class InvoiceList extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        return true;
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -154,7 +161,7 @@ public class InvoiceList extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info=(AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        final AdapterView.AdapterContextMenuInfo info=(AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
         Invoice invoiceItem = (Invoice) customAdapter.getItem(info.position);
         final String id = invoiceItem.getInvoice_id();
@@ -179,7 +186,6 @@ public class InvoiceList extends AppCompatActivity {
                 dialog.setTitle("Cập nhật Hóa Đơn");
                 dialog.setContentView(R.layout.dialog_add_invoice);
                 final EditText edtID,edtStudent, edtDate;
-//                final TextView ;
                 Button btnCancel, btnUpdate;
 
                 edtID=(EditText) dialog.findViewById(R.id.edtInvoiceID);
@@ -199,17 +205,13 @@ public class InvoiceList extends AppCompatActivity {
                         myCalendar.set(Calendar.YEAR, year);
                         myCalendar.set(Calendar.MONTH, monthOfYear);
                         myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-//                        updateLabel();
                         String myFormat = "dd/MM/yyyy"; //In which you need put here
                         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-
                         edtDate.setText(sdf.format(myCalendar.getTime()));
                     }
 
                 };
-
                 edtDate.setOnClickListener(new View.OnClickListener() {
-
                     @Override
                     public void onClick(View v) {
                         // TODO Auto-generated method stub
@@ -218,14 +220,13 @@ public class InvoiceList extends AppCompatActivity {
                                 myCalendar.get(Calendar.DAY_OF_MONTH)).show();
                     }
                 });
-
-
-//                END DATE
-
                 Invoice invoice=invoiceModify.fetchInvoiceByID(id);
                 edtID.setText(invoice.getInvoice_id());
                 edtDate.setText(invoice.getInvoice_date());
                 edtStudent.setText(invoice.getInvoice_student());
+
+                edtID.setEnabled(false);
+                edtStudent.setEnabled(false);
 
                 btnCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -264,6 +265,7 @@ public class InvoiceList extends AppCompatActivity {
 
                 invoice = invoiceModify.fetchInvoiceByID(id);
                 edtInvoiceID.setText(invoice.getInvoice_id());
+                inforSubList = inforModify.getSubonInfor(invoice.getInvoice_id());
                 edtInvoiceID.setEnabled(false);
 
                 btnCancel=(Button) dialogPlus.findViewById(R.id.btnCancel);
@@ -315,16 +317,36 @@ public class InvoiceList extends AppCompatActivity {
                 btnInsert.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Invoice_Info info = new Invoice_Info( edtInvoiceID.getText().toString(), edtMaMH.getText().toString(), edtMoney.getText().toString());
-
-                        if(info != null){
-//                            inforModify( new Invoice_Info( edtInvoiceID.getText().toString(), edtMaMH.getText().toString(), edtMoney.getText().toString()));
-                            Toast.makeText(InvoiceList.this, info.getInvoice_id() , Toast.LENGTH_SHORT).show();
-//                            Toast.makeText(InvoiceList.this,  edtMaMH.getText().toString(), Toast.LENGTH_SHORT).show();
-//                            Toast.makeText(InvoiceList.this, edtMoney.getText().toString(), Toast.LENGTH_SHORT).show();
+//<<<<<<< HEAD
+//                        Invoice_Info info = new Invoice_Info( edtInvoiceID.getText().toString(), edtMaMH.getText().toString(), edtMoney.getText().toString());
+//
+//                        if(info != null){
+////                            inforModify( new Invoice_Info( edtInvoiceID.getText().toString(), edtMaMH.getText().toString(), edtMoney.getText().toString()));
+//                            Toast.makeText(InvoiceList.this, info.getInvoice_id() , Toast.LENGTH_SHORT).show();
+////                            Toast.makeText(InvoiceList.this,  edtMaMH.getText().toString(), Toast.LENGTH_SHORT).show();
+////                            Toast.makeText(InvoiceList.this, edtMoney.getText().toString(), Toast.LENGTH_SHORT).show();
+//                        }
+//                        setAdapter();
+//=======
+                        Infor infor = new Infor(edtInvoiceID.getText().toString(), edtMaMH.getText().toString(), edtMoney.getText().toString());
+                        boolean flag = true;
+                        for(int i = 0; i < inforSubList.size(); i++){
+                            if(infor.getSub_id().equals(inforSubList.get(i).getSub_id())){
+                                flag = false;
+                            }
                         }
-                        setAdapter();
-                        dialogPlus.dismiss();
+                        if (flag == false) {
+                            Toast.makeText(InvoiceList.this, "Mã sinh viên này đã tồn tại !!!", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            if (infor != null) {
+                                inforModify.addDetail(infor);
+                                Toast.makeText(InvoiceList.this, "success", Toast.LENGTH_SHORT).show();
+                            }
+                            setAdapter();
+                            dialogPlus.dismiss();
+                        }
+
                     }
                 });
                 dialogPlus.show();
