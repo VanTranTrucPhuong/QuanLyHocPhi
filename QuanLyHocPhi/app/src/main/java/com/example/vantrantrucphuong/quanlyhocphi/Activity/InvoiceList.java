@@ -1,5 +1,6 @@
 package com.example.vantrantrucphuong.quanlyhocphi.Activity;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,21 +24,27 @@ import android.widget.Toast;
 
 import com.example.vantrantrucphuong.quanlyhocphi.Adapter.InvoiceAdapter;
 import com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper;
+import com.example.vantrantrucphuong.quanlyhocphi.Database.InforModify;
 import com.example.vantrantrucphuong.quanlyhocphi.Database.InvoiceModify;
 import com.example.vantrantrucphuong.quanlyhocphi.Database.SubjectModify;
 import com.example.vantrantrucphuong.quanlyhocphi.Model.Invoice;
+import com.example.vantrantrucphuong.quanlyhocphi.Model.Invoice_Info;
 import com.example.vantrantrucphuong.quanlyhocphi.Model.Subject;
 import com.example.vantrantrucphuong.quanlyhocphi.R;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import static com.example.vantrantrucphuong.quanlyhocphi.R.id.listViewInvoice;
 
 public class InvoiceList extends AppCompatActivity {
 
     InvoiceModify invoiceModify;
+    InforModify inforModify; //thong tin hoa don
     SubjectModify subjectModify;
     private ListView lvInvoice;
     private DBHelper dbHelper;
@@ -53,7 +61,7 @@ public class InvoiceList extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         lvInvoice = (ListView) findViewById(listViewInvoice);
-        invoiceModify=new InvoiceModify(this);
+        invoiceModify = new InvoiceModify(this);
         Intent intent = getIntent();
         masv= intent.getStringExtra(StudentList.masoSinhVien);
         invoiceList = invoiceModify.getAll(masv);
@@ -168,22 +176,55 @@ public class InvoiceList extends AppCompatActivity {
                 return true;
             case R.id.action_edit:
                 final Dialog dialog = new Dialog(this);
-                dialog.setTitle("Cập nhật môn học");
+                dialog.setTitle("Cập nhật Hóa Đơn");
                 dialog.setContentView(R.layout.dialog_add_invoice);
-                final EditText edtID,edtStudent;
-                final TextView txtDate;
+                final EditText edtID,edtStudent, edtDate;
+//                final TextView ;
                 Button btnCancel, btnUpdate;
 
                 edtID=(EditText) dialog.findViewById(R.id.edtInvoiceID);
-                txtDate=(TextView) dialog.findViewById(R.id.txtDate);
+                edtDate=(EditText) dialog.findViewById(R.id.edtDate);
                 edtStudent=(EditText) dialog.findViewById(R.id.edtStudentID);
 
                 btnCancel=(Button) dialog.findViewById(R.id.btnCancel);
                 btnUpdate=(Button) dialog.findViewById(R.id.btnUpdate);
 
+                final Calendar myCalendar = Calendar.getInstance();
+                final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                          int dayOfMonth) {
+                        // TODO Auto-generated method stub
+                        myCalendar.set(Calendar.YEAR, year);
+                        myCalendar.set(Calendar.MONTH, monthOfYear);
+                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+//                        updateLabel();
+                        String myFormat = "dd/MM/yyyy"; //In which you need put here
+                        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+                        edtDate.setText(sdf.format(myCalendar.getTime()));
+                    }
+
+                };
+
+                edtDate.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        // TODO Auto-generated method stub
+                        new DatePickerDialog(InvoiceList.this, date, myCalendar
+                                .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                    }
+                });
+
+
+//                END DATE
+
                 Invoice invoice=invoiceModify.fetchInvoiceByID(id);
                 edtID.setText(invoice.getInvoice_id());
-                txtDate.setText(invoice.getInvoice_date());
+                edtDate.setText(invoice.getInvoice_date());
                 edtStudent.setText(invoice.getInvoice_student());
 
                 btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -196,7 +237,7 @@ public class InvoiceList extends AppCompatActivity {
                 btnUpdate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Invoice invoice = new Invoice( edtID.getText().toString(), txtDate.getText().toString(), edtStudent.getText().toString());
+                        Invoice invoice = new Invoice( edtID.getText().toString(), edtDate.getText().toString(), edtStudent.getText().toString());
                         int result = invoiceModify.update(invoice);
                         Toast.makeText(InvoiceList.this, "ID update: " + String.valueOf(id), Toast.LENGTH_SHORT).show();
                         if(result > 0){
@@ -216,9 +257,8 @@ public class InvoiceList extends AppCompatActivity {
                 dialogPlus.setTitle("Chi Tiết Hóa Đơn");
                 dialogPlus.setContentView(R.layout.dialog_add_infor);
                 final EditText edtMaMH, edtMoney, edtInvoiceID;
-                Button btnInsert, btnChooseSub;
+                Button btnInsert, btnChooseSub ;
                 edtInvoiceID=(EditText) dialogPlus.findViewById(R.id.edtInvoiceID);
-
                 edtMaMH =(EditText) dialogPlus.findViewById(R.id.edtMaMH);
                 edtMoney =(EditText) dialogPlus.findViewById(R.id.edtMoney);
 
@@ -228,13 +268,14 @@ public class InvoiceList extends AppCompatActivity {
 
                 btnCancel=(Button) dialogPlus.findViewById(R.id.btnCancel);
                 btnInsert=(Button) dialogPlus.findViewById(R.id.btnUpdate);
-                btnChooseSub =(Button) dialogPlus.findViewById(R.id.btnChooseSub);
+//                btnChooseSub =(Button) dialogPlus.findViewById(R.id);
 
-                btnChooseSub.setOnClickListener(new View.OnClickListener() {
+                edtMaMH.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         final AlertDialog.Builder builder = new AlertDialog.Builder(InvoiceList.this);
-                        builder.setTitle("Chọn mã môn học");                final List<String> list = new ArrayList<String>();
+                        builder.setTitle("Chọn mã môn học");
+                        final List<String> list = new ArrayList<String>();
                         for(int i = 0; i < subjectList.size(); i++){
                             list.add(subjectList.get(i).getSubject_id());
                         }
@@ -248,7 +289,7 @@ public class InvoiceList extends AppCompatActivity {
                                 int creditNumber = 0;
                                 Log.v("-----> " , "selected text = " + subjectID);
                                 edtMaMH.setText(types[which]);
-                                edtMaMH.setEnabled(false);
+//                                edtMaMH.setEnabled(false);
                                 for(int i = 0; i < subjectList.size(); i++){
                                     if(subjectID.equals(subjectList.get(i).getSubject_id())){
                                         creditNumber = subjectList.get(i).getCreditNumber();
@@ -271,16 +312,21 @@ public class InvoiceList extends AppCompatActivity {
                         dialogPlus.dismiss();
                     }
                 });
-
-
                 btnInsert.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Invoice_Info info = new Invoice_Info( edtInvoiceID.getText().toString(), edtMaMH.getText().toString(), edtMoney.getText().toString());
 
+                        if(info != null){
+                            inforModify.add( new Invoice_Info( edtInvoiceID.getText().toString(), edtMaMH.getText().toString(), edtMoney.getText().toString()));
+                            Toast.makeText(InvoiceList.this, info.getInvoice_id() , Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(InvoiceList.this,  edtMaMH.getText().toString(), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(InvoiceList.this, edtMoney.getText().toString(), Toast.LENGTH_SHORT).show();
+                        }
+                        setAdapter();
                         dialogPlus.dismiss();
                     }
                 });
-
                 dialogPlus.show();
                 return true;
         }

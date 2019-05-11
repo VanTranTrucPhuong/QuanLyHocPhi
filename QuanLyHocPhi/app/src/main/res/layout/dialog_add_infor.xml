@@ -41,14 +41,13 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="45dp">
-
-        <Button
-            android:id="@+id/btnChooseSub"
-            android:layout_gravity="center"
-            android:layout_weight="1.75"
-            android:text="Mã MH"
+        <TextView
             android:layout_width="0dp"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_weight="1.75"
+            android:gravity="center|left"
+            android:text="@string/maMH"
+            android:textSize="16dp" />
 
         <EditText
             android:id="@+id/edtMaMH"
@@ -57,29 +56,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"/>
     </LinearLayout>
-<<<<<<< HEAD
-    <LinearLayout
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:weightSum="5"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="45dp">
-
-        <TextView
-            android:layout_width="204dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.75"
-            android:gravity="center|left"
-            android:text="@string/maMH"
-            android:textSize="16dp" />
-        <Spinner
-            android:id="@+id/spnSubject"
-            android:layout_width="match_parent"
-            android:layout_height="50dp" />
-    </LinearLayout>
-=======
->>>>>>> 1785017c16a7694605c4ba13490e7463d0dbdbb0
 
     <LinearLayout
         android:paddingLeft="15dp"

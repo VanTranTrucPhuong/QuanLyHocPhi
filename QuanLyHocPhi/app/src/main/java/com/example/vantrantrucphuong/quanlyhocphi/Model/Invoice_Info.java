@@ -4,9 +4,9 @@ public class Invoice_Info {
     private String invoice_id;
     private String subject_id;
     private String cost;
+
     public Invoice_Info() {
     }
-
     public Invoice_Info(String invoice_id, String subject_id, String cost) {
         this.invoice_id = invoice_id;
         this.subject_id = subject_id;

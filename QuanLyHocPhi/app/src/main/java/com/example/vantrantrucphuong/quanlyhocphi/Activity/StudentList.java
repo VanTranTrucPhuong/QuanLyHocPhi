@@ -193,7 +193,7 @@ public class StudentList extends AppCompatActivity {
 
                 final AlertDialog.Builder builder = new AlertDialog.Builder(StudentList.this);
                 builder.setTitle("Xác nhận");
-                builder.setMessage("Bạn có muốn xóa sản phẩm này không?");
+                builder.setMessage("Bạn có muốn xóa mục này không?");
                 builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -277,8 +277,8 @@ public class StudentList extends AppCompatActivity {
                 edtStudent_id.setText(student_invoice.getStudent_id());
                 edtStudent_id.setEnabled(false);
 
-                edtStudent.setText(id);
-                edtStudent.setEnabled(false);
+                edtStudent_id.setText(id);
+                edtStudent_id.setEnabled(false);
 
                 btnCancel=(Button) dialogPlus.findViewById(R.id.btnCancel);
                 btnInsert=(Button) dialogPlus.findViewById(R.id.btnUpdate);
@@ -295,7 +295,7 @@ public class StudentList extends AppCompatActivity {
                         myCalendar.set(Calendar.MONTH, monthOfYear);
                         myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 //                        updateLabel();
-                        String myFormat = "MM/dd/yy"; //In which you need put here
+                        String myFormat = "dd/MM/yyyy"; //In which you need put here
                         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
                         edtDate.setText(sdf.format(myCalendar.getTime()));

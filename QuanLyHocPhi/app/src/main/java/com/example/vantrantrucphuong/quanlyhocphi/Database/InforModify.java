@@ -25,23 +25,13 @@ public class InforModify {
     private final String TAG = "DBManager";
     private DBHelper dbHelper;
 
+
+
     public InforModify(Context context) {
         dbHelper= new DBHelper(context);
     }
 
-    public void add(Invoice_Info info) {
-        SQLiteDatabase db= dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
 
-//        values.put(DBHelper.KEY_SUB_ORDER, subject.getId());
-        values.put(DBHelper.KEY_ID_INVOICE, info.getInvoice_id());
-        values.put(KEY_ID_SUB, info.getSubject_id());
-        values.put(DBHelper.KEY_COST, info.getCost());
-
-        db.insert(TABLE_NAME_INFOR,null,values);
-        db.close();
-        Log.d(TAG, " Successfuly");
-    }
 
     public List<Invoice_Info> getAll() {
         List<Invoice_Info> listInvoice = new ArrayList<>();
