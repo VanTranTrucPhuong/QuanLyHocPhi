@@ -30,7 +30,7 @@
             android:layout_weight="3.25"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:id="@+id/edtMaHoadon"/>
+            android:id="@+id/edtInvoiceID"/>
     </LinearLayout>
 
     <LinearLayout
@@ -51,7 +51,7 @@
             android:id="@+id/textView"/>
 
         <EditText
-            android:id="@+id/edtNgay"
+            android:id="@+id/edtDate"
             android:textSize="16dp"
             android:layout_weight="3.25"
             android:layout_width="0dp"
@@ -72,7 +72,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"/>
         <EditText
-            android:id="@+id/edtMaSV"
+            android:id="@+id/edtStudentID"
             android:textSize="16dp"
             android:layout_weight="3.25"
             android:layout_width="0dp"

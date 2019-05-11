@@ -51,7 +51,7 @@ public class SubjectModify {
                 Subject subject = new Subject();
                 subject.setSubject_id(cursor.getString(0));
                 subject.setSubjectName(cursor.getString(1)+"");
-                subject.setCreditNumber(cursor.getString(2));
+                subject.setCreditNumber(cursor.getInt(2));
                 listSubject.add(subject);
 
             } while (cursor.moveToNext());
@@ -89,7 +89,7 @@ public class SubjectModify {
             return null;
         }
 //        return new Subject(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3));
-        return new Subject(cursor.getString(0),cursor.getString(1),cursor.getString(2));
+        return new Subject(cursor.getString(0),cursor.getString(1),cursor.getInt(2));
     }
 
 

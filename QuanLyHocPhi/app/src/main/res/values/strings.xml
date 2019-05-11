@@ -28,6 +28,7 @@
     <!--<string name="app_name">QLSV</string>-->
     <string name="action_new">Thêm mới</string>
     <string name="action_invoice">Thêm Hóa Đơn</string>
+    <string name="action_invoice_info">Thêm Chi Tiết Hóa Đơn</string>
     <string name="action_edit">Sửa Thông Tin</string>
     <string name="action_delete">Xóa</string>
 

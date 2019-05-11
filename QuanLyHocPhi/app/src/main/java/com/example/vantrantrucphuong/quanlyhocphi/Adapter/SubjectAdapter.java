@@ -45,7 +45,7 @@ public class SubjectAdapter extends ArrayAdapter<Subject> {
         Subject subject = listSubject.get(position);
         viewHolder.tvId.setText(String.valueOf(subject.getSubject_id()));
         viewHolder.tvName.setText(subject.getSubjectName());
-        viewHolder.tvCreditNumber.setText(subject.getCreditNumber());
+        viewHolder.tvCreditNumber.setText(String.valueOf(subject.getCreditNumber()));
 
         return convertView;
     }
