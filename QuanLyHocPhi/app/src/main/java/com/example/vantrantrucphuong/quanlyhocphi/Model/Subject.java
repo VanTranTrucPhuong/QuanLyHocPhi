@@ -8,12 +8,12 @@ public class Subject {
 //    private int id;
     private String subject_id;
     private String subjectName;
-    private String creditNumber;
+    private int creditNumber;
 
     public Subject(){};
 
 
-    public Subject(String subject_id, String subjectName, String creditNumber) {
+    public Subject(String subject_id, String subjectName, int creditNumber) {
         this.subject_id = subject_id;
         this.subjectName = subjectName;
         this.creditNumber = creditNumber;
@@ -35,11 +35,11 @@ public class Subject {
         this.subjectName = subjectName;
     }
 
-    public String getCreditNumber() {
+    public int getCreditNumber() {
         return creditNumber;
     }
 
-    public void setCreditNumber(String creditNumber) {
+    public void setCreditNumber(int creditNumber) {
         this.creditNumber = creditNumber;
     }
 }

@@ -33,51 +33,31 @@
             android:id="@+id/edtInvoiceID"/>
     </LinearLayout>
 
+
     <LinearLayout
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:weightSum="5"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="45dp">
 
-        <TextView
-            android:textSize="16dp"
-            android:gravity="center|left"
+        <Button
+            android:id="@+id/btnChooseSub"
+            android:layout_gravity="center"
             android:layout_weight="1.75"
-            android:text="@string/txtNgayHP"
+            android:text="Mã MH"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:id="@+id/textView"/>
+            android:layout_height="match_parent"/>
 
         <EditText
-            android:id="@+id/edtDate"
+            android:id="@+id/edtMaMH"
             android:textSize="16dp"
             android:layout_weight="3.25"
             android:layout_width="0dp"
             android:layout_height="match_parent"/>
     </LinearLayout>
-    <LinearLayout
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:weightSum="5"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:textSize="16dp"
-            android:gravity="center|left"
-            android:layout_weight="1.75"
-            android:text="@string/maSV"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"/>
-        <EditText
-            android:id="@+id/edtStudentID"
-            android:textSize="16dp"
-            android:layout_weight="3.25"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"/>
-    </LinearLayout>
+<<<<<<< HEAD
     <LinearLayout
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
@@ -98,6 +78,8 @@
             android:layout_width="match_parent"
             android:layout_height="50dp" />
     </LinearLayout>
+=======
+>>>>>>> 1785017c16a7694605c4ba13490e7463d0dbdbb0
 
     <LinearLayout
         android:paddingLeft="15dp"
@@ -106,20 +88,24 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TextView
             android:textSize="16dp"
             android:gravity="center|left"
             android:layout_weight="1.75"
             android:text="@string/soTien"
             android:layout_width="0dp"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:id="@+id/textView3"/>
+
         <EditText
             android:id="@+id/edtMoney"
             android:textSize="16dp"
             android:layout_weight="3.25"
             android:layout_width="0dp"
             android:layout_height="match_parent"/>
-    </LinearLayout><LinearLayout
+    </LinearLayout>
+    <LinearLayout
         android:layout_margin="20dp"
         android:weightSum="2"
         android:paddingLeft="15dp"
@@ -147,6 +133,19 @@
             android:text="Cancel"
             android:layout_width="0dp"
             android:layout_height="35dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_margin="20dp"
+        android:weightSum="2"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+
     </LinearLayout>
 
 </LinearLayout>

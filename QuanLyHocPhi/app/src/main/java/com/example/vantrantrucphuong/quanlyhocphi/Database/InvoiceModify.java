@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.example.vantrantrucphuong.quanlyhocphi.Model.Invoice;
-import com.example.vantrantrucphuong.quanlyhocphi.Model.Subject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +76,7 @@ public class InvoiceModify {
 
 
     //Lay 1 du lieu
-    public Invoice fetchByID(String invoice_id){
+    public Invoice fetchInvoiceByID(String invoice_id){
         SQLiteDatabase db= dbHelper.getReadableDatabase();
         Cursor cursor= db.query(TABLE_NAME_INVOICE,new String[]{DBHelper.KEY_ID_INVOICE,DBHelper.KEY_DATE_INVOICE,DBHelper.KEY_STUDENT_INVOICE},DBHelper.KEY_ID_INVOICE+"=?",new String[]{String.valueOf(invoice_id)},null,null,null);
         if(cursor!=null){

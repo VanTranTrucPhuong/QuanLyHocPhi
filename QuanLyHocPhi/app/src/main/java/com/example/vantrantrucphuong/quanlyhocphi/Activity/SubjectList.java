@@ -96,7 +96,7 @@ public class SubjectList extends AppCompatActivity {
             btnInsert.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Subject subject = new Subject(edtIDSub.getText().toString(),edtNameSub.getText().toString(), edtCreditNumber.getText().toString());
+                    Subject subject = new Subject(edtIDSub.getText().toString(),edtNameSub.getText().toString(), Integer.parseInt(edtCreditNumber.getText().toString()));
                     boolean flag = true;
                     for(int i = 0; i < subjectList.size(); i++){
                         if(subject.getSubject_id().equals(subjectList.get(i).getSubject_id())){
@@ -183,7 +183,7 @@ public class SubjectList extends AppCompatActivity {
                 dialog.setTitle("Cập nhật môn học");
                 dialog.setContentView(R.layout.dialog_add_subject);
                 final EditText edtNameSub, edtIDSub, edtCreditNumber;
-                Button btnCancel, btnUpdate;
+                Button btnCancel, btnUpdate, btnChooseSub;
 
                 edtNameSub=(EditText) dialog.findViewById(R.id.edtNameSub);
                 edtIDSub=(EditText) dialog.findViewById(R.id.edtIDSub);
@@ -191,12 +191,15 @@ public class SubjectList extends AppCompatActivity {
                 btnCancel=(Button) dialog.findViewById(R.id.btnCancel);
                 btnUpdate=(Button) dialog.findViewById(R.id.btnUpdate);
 
+
                 Subject subject=subjectModify.fetchSubjectByID(id);
                 edtIDSub.setText(subject.getSubject_id());
-                edtCreditNumber.setText(subject.getCreditNumber());
+                edtCreditNumber.setText(String.valueOf(subject.getCreditNumber()));
                 edtNameSub.setText(subject.getSubjectName());
 
                 edtIDSub.setEnabled(false);
+
+
 
                 btnCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -208,7 +211,7 @@ public class SubjectList extends AppCompatActivity {
                 btnUpdate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Subject subject = new Subject( edtIDSub.getText().toString(), edtNameSub.getText().toString(), edtCreditNumber.getText().toString());
+                        Subject subject = new Subject( edtIDSub.getText().toString(), edtNameSub.getText().toString(), Integer.parseInt(edtCreditNumber.getText().toString()));
 //                        subjectModify.updateSubject(subject);
 //                        setAdapter();
 //                        updateListSubject();

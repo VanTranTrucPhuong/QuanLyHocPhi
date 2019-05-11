@@ -1,5 +1,6 @@
 package com.example.vantrantrucphuong.quanlyhocphi.Activity;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,11 +15,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.vantrantrucphuong.quanlyhocphi.Adapter.InvoiceAdapter;
 import com.example.vantrantrucphuong.quanlyhocphi.Adapter.StudentAdapter;
 import com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper;
 import com.example.vantrantrucphuong.quanlyhocphi.Database.InvoiceModify;
@@ -27,7 +28,10 @@ import com.example.vantrantrucphuong.quanlyhocphi.Model.Invoice;
 import com.example.vantrantrucphuong.quanlyhocphi.Model.Student;
 import com.example.vantrantrucphuong.quanlyhocphi.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import static com.example.vantrantrucphuong.quanlyhocphi.R.id.edtID;
 import static com.example.vantrantrucphuong.quanlyhocphi.R.id.edtName;
@@ -37,17 +41,18 @@ import static com.example.vantrantrucphuong.quanlyhocphi.R.id.lvDS;
 public class StudentList extends AppCompatActivity {
 
     StudentModify studentModify;
+
     private ListView lvStudent;
     private DBHelper dbHelper;
     private StudentAdapter customAdapter;
     private List<Student> studentList;
+
     public static String masoSinhVien = "";
 
     InvoiceModify invoiceModify;
     InvoiceList invoiceListmain;
     private ListView lvInvoice;
     private List<Invoice> invoiceList;
-    public String masv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +67,9 @@ public class StudentList extends AppCompatActivity {
         studentList = studentModify.getAllStudent();
         setAdapter();
         setEventClickItem();
+
         registerForContextMenu(lvStudent);
+
     }
 
     private void setEventClickItem() {
@@ -257,12 +264,18 @@ public class StudentList extends AppCompatActivity {
             case R.id.action_ivoice:
                 final Dialog dialogPlus=new Dialog(this);
                 dialogPlus.setTitle("Thêm Hóa Đơn");
-                dialogPlus.setContentView(R.layout.dialog_add_infor);
-                final EditText edtID, edtDate, edtStudent;
-                Button btnInsert;
+                dialogPlus.setContentView(R.layout.dialog_add_invoice);
+                final EditText edtID, edtDate, edtStudent_id, edtMaMH, edtMoney;
+                Button btnInsert, btnChooseSub;
                 edtID=(EditText) dialogPlus.findViewById(R.id.edtInvoiceID);
                 edtDate=(EditText) dialogPlus.findViewById(R.id.edtDate);
-                edtStudent=(EditText) dialogPlus.findViewById(R.id.edtStudentID);
+                edtStudent_id=(EditText) dialogPlus.findViewById(R.id.edtStudentID);
+                edtMaMH =(EditText) dialogPlus.findViewById(R.id.edtMaMH);
+                edtMoney =(EditText) dialogPlus.findViewById(R.id.edtMoney);
+
+                Student student_invoice = studentModify.fetchStudentByID(id);
+                edtStudent_id.setText(student_invoice.getStudent_id());
+                edtStudent_id.setEnabled(false);
 
                 edtStudent.setText(id);
                 edtStudent.setEnabled(false);
@@ -270,17 +283,44 @@ public class StudentList extends AppCompatActivity {
                 btnCancel=(Button) dialogPlus.findViewById(R.id.btnCancel);
                 btnInsert=(Button) dialogPlus.findViewById(R.id.btnUpdate);
 
-                btnCancel.setOnClickListener(new View.OnClickListener() {
+//                DATE
+                final Calendar myCalendar = Calendar.getInstance();
+                final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                          int dayOfMonth) {
+                        // TODO Auto-generated method stub
+                        myCalendar.set(Calendar.YEAR, year);
+                        myCalendar.set(Calendar.MONTH, monthOfYear);
+                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+//                        updateLabel();
+                        String myFormat = "MM/dd/yy"; //In which you need put here
+                        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+                        edtDate.setText(sdf.format(myCalendar.getTime()));
+                    }
+
+                };
+
+                edtDate.setOnClickListener(new View.OnClickListener() {
+
                     @Override
                     public void onClick(View v) {
-                        dialogPlus.dismiss();
+                        // TODO Auto-generated method stub
+                        new DatePickerDialog(StudentList.this, date, myCalendar
+                                .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
                     }
                 });
+
+
+//                END DATE
 
                 btnInsert.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Invoice invoice = new Invoice(edtID.getText().toString(),edtDate.getText().toString(), edtStudent.getText().toString());
+                        Invoice invoice = new Invoice(edtID.getText().toString(),edtDate.getText().toString(), edtStudent_id.getText().toString());
                         if (invoice != null) {
                             invoiceModify.add(invoice);
                         }
