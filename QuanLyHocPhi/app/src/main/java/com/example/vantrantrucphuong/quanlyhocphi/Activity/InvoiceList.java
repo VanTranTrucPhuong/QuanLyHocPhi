@@ -29,7 +29,6 @@ import com.example.vantrantrucphuong.quanlyhocphi.Database.InvoiceModify;
 import com.example.vantrantrucphuong.quanlyhocphi.Database.SubjectModify;
 import com.example.vantrantrucphuong.quanlyhocphi.Model.Infor;
 import com.example.vantrantrucphuong.quanlyhocphi.Model.Invoice;
-import com.example.vantrantrucphuong.quanlyhocphi.Model.Invoice_Info;
 import com.example.vantrantrucphuong.quanlyhocphi.Model.Subject;
 import com.example.vantrantrucphuong.quanlyhocphi.R;
 
@@ -55,6 +54,8 @@ public class InvoiceList extends AppCompatActivity {
     private List<Subject> subjectList;
     private List<Infor> inforSubList; //LIST CAC MON HOC THEO HOA DON
     public String masv;
+    public static String masoHoaDon = "";
+    boolean flag;
 
 
     @Override
@@ -75,10 +76,24 @@ public class InvoiceList extends AppCompatActivity {
 
 
         inforModify = new InforModify(this);
-
+        setEventClickItem();
 
         setAdapter();
         registerForContextMenu(lvInvoice);
+    }
+    private void setEventClickItem() {
+        lvInvoice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Invoice invoiceItem = (Invoice) customAdapter.getItem(i);
+                final String id = invoiceItem.getInvoice_id();
+//                Toast.makeText(StudentList.this, "ID: " + id, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), InforList.class);
+                intent.putExtra(masoHoaDon,id);
+                startActivity(intent);
+
+            }
+        });
     }
 
     private void setAdapter() {
@@ -90,53 +105,12 @@ public class InvoiceList extends AppCompatActivity {
             lvInvoice.setSelection(customAdapter.getCount()-1);
         }
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.action_new) {
-//            final Dialog dialog=new Dialog(this);
-//            dialog.setTitle("Thêm mới");
-//            dialog.setContentView(R.layout.dialog_add_invoice);
-//            final EditText edtID, txtDate, edtStudent;
-//            Button btnCancel, btnInsert;
-//
-//            edtID=(EditText) dialog.findViewById(R.id.edtInvoiceID);
-//            txtDate=(TextView) dialog.findViewById(R.id.txtDate);
-//            edtStudent=(EditText) dialog.findViewById(R.id.edtStudentID);
-//
-//            btnCancel=(Button) dialog.findViewById(R.id.btnCancel);
-//            btnInsert=(Button) dialog.findViewById(R.id.btnUpdate);
-//
-//            btnCancel.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    dialog.dismiss();
-//                }
-//            });
-//
-//            btnInsert.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Invoice invoice = new Invoice(edtID.getText().toString(),txtDate.getText().toString(), edtStudent.getText().toString());
-//                    if (invoice != null) {
-//                        invoiceModify.add(invoice);
-//                    }
-//                    updateListInvoice();
-//                    setAdapter();
-//                    dialog.dismiss();
-//                }
-//            });
-//
-//            dialog.show();
-//            return true;
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -161,25 +135,39 @@ public class InvoiceList extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+
         final AdapterView.AdapterContextMenuInfo info=(AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
         Invoice invoiceItem = (Invoice) customAdapter.getItem(info.position);
         final String id = invoiceItem.getInvoice_id();
 
-        Toast.makeText(this, (lvInvoice.getItemAtPosition(info.position)).toString(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, (lvInvoice.getItemAtPosition(info.position)).toString(), Toast.LENGTH_SHORT).show();
 
         switch (item.getItemId()){
 
 
             case R.id.action_delete:
-                Toast.makeText(this, String.valueOf(id), Toast.LENGTH_SHORT).show();
-                int result = invoiceModify.delete(id);
-                if(result>0){
-                    Toast.makeText(this,"Xóa thành công", Toast.LENGTH_SHORT).show();
-                    updateListInvoice();
-                }else{
-                    Toast.makeText(this, "Xóa thất bại", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, String.valueOf(id), Toast.LENGTH_SHORT).show();
+//                Infor infor = new Infor(invoiceItem.getText().toString(), edtMaMH.getText().toString(), edtMoney.getText().toString());
+                inforSubList = inforModify.getAll();
+                for(int i = 0; i < inforSubList.size(); i++){
+                    if(invoiceItem.getInvoice_id().equals(inforSubList.get(i).getSub_id())){
+                        flag = false;
+                    }
                 }
+                if (flag == false) {
+                    Toast.makeText(InvoiceList.this, "Hóa đơn đã lập chi tiết ! KO ĐC XOA", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    int result = invoiceModify.delete(id);
+                    if(result>0){
+                        Toast.makeText(this,"Xóa thành công", Toast.LENGTH_SHORT).show();
+                        updateListInvoice();
+                    }else{
+                        Toast.makeText(this, "Xóa thất bại", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
                 return true;
             case R.id.action_edit:
                 final Dialog dialog = new Dialog(this);
@@ -238,9 +226,13 @@ public class InvoiceList extends AppCompatActivity {
                 btnUpdate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if(edtID.getText().toString().equalsIgnoreCase("")|| edtDate.getText().toString().equalsIgnoreCase("") || edtStudent.getText().toString().equalsIgnoreCase("")){
+                            Toast.makeText(InvoiceList.this, "Chưa đủ thông tin ! Vui lòng kiểm tra lại.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         Invoice invoice = new Invoice( edtID.getText().toString(), edtDate.getText().toString(), edtStudent.getText().toString());
                         int result = invoiceModify.update(invoice);
-                        Toast.makeText(InvoiceList.this, "ID update: " + String.valueOf(id), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(InvoiceList.this, "ID update: " + String.valueOf(id), Toast.LENGTH_SHORT).show();
                         if(result > 0){
                             updateListInvoice();
                         }
@@ -317,17 +309,10 @@ public class InvoiceList extends AppCompatActivity {
                 btnInsert.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//<<<<<<< HEAD
-//                        Invoice_Info info = new Invoice_Info( edtInvoiceID.getText().toString(), edtMaMH.getText().toString(), edtMoney.getText().toString());
-//
-//                        if(info != null){
-////                            inforModify( new Invoice_Info( edtInvoiceID.getText().toString(), edtMaMH.getText().toString(), edtMoney.getText().toString()));
-//                            Toast.makeText(InvoiceList.this, info.getInvoice_id() , Toast.LENGTH_SHORT).show();
-////                            Toast.makeText(InvoiceList.this,  edtMaMH.getText().toString(), Toast.LENGTH_SHORT).show();
-////                            Toast.makeText(InvoiceList.this, edtMoney.getText().toString(), Toast.LENGTH_SHORT).show();
-//                        }
-//                        setAdapter();
-//=======
+                        if(edtInvoiceID.getText().toString().equalsIgnoreCase("")|| edtMaMH.getText().toString().equalsIgnoreCase("") || edtMoney.getText().toString().equalsIgnoreCase("")){
+                            Toast.makeText(InvoiceList.this, "Chưa đủ thông tin ! Vui lòng kiểm tra lại.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         Infor infor = new Infor(edtInvoiceID.getText().toString(), edtMaMH.getText().toString(), edtMoney.getText().toString());
                         boolean flag = true;
                         for(int i = 0; i < inforSubList.size(); i++){
@@ -336,12 +321,16 @@ public class InvoiceList extends AppCompatActivity {
                             }
                         }
                         if (flag == false) {
-                            Toast.makeText(InvoiceList.this, "Mã sinh viên này đã tồn tại !!!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(InvoiceList.this, "Môn học đã đc lập hóa đơn !!!", Toast.LENGTH_SHORT).show();
                         }
                         else {
                             if (infor != null) {
                                 inforModify.addDetail(infor);
                                 Toast.makeText(InvoiceList.this, "success", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(InvoiceList.this, "Chưa đủ thông tin ! Vui lòng kiểm tra lại.", Toast.LENGTH_SHORT).show();
+                                return;
                             }
                             setAdapter();
                             dialogPlus.dismiss();

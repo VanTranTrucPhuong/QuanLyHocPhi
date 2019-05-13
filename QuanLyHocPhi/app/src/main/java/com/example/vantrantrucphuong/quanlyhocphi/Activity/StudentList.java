@@ -133,6 +133,10 @@ public class StudentList extends AppCompatActivity {
             btnInsert.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(edtIDSt.getText().toString().equalsIgnoreCase("") || edtNameSt.getText().toString().equalsIgnoreCase("") || edtPhoneNumber.getText().toString().equalsIgnoreCase("")){
+                        Toast.makeText(StudentList.this, "Chưa đủ thông tin ! Vui lòng kiểm tra lại.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     Student student = new Student(edtIDSt.getText().toString(),edtNameSt.getText().toString(), edtPhoneNumber.getText().toString());
                     boolean flag = true;
                     for(int i = 0; i < studentList.size(); i++){
@@ -245,6 +249,10 @@ public class StudentList extends AppCompatActivity {
                 btnUpdate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if(edtIDSt.getText().toString().equalsIgnoreCase("") || edtNameSt.getText().toString().equalsIgnoreCase("") || edtPhoneNumber.getText().toString().equalsIgnoreCase("")){
+                            Toast.makeText(StudentList.this, "Chưa đủ thông tin ! Vui lòng kiểm tra lại.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         Student Student = new Student(edtIDSt.getText().toString(), edtNameSt.getText().toString(), edtPhoneNumber.getText().toString());
                         int result = studentModify.updateStudent(Student);
                         Toast.makeText(StudentList.this, "ID update: " + String.valueOf(edtIDSt.getText().toString()), Toast.LENGTH_SHORT).show();

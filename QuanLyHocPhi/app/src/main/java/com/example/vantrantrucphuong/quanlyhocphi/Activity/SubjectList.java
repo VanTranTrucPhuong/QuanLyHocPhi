@@ -96,6 +96,10 @@ public class SubjectList extends AppCompatActivity {
             btnInsert.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(edtIDSub.getText().toString().equalsIgnoreCase("") || edtNameSub.getText().toString().equalsIgnoreCase("") || edtCreditNumber.getText().toString().equalsIgnoreCase("")){
+                        Toast.makeText(SubjectList.this, "Chưa đủ thông tin ! Vui lòng kiểm tra lại.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     Subject subject = new Subject(edtIDSub.getText().toString(),edtNameSub.getText().toString(), Integer.parseInt(edtCreditNumber.getText().toString()));
                     boolean flag = true;
                     for(int i = 0; i < subjectList.size(); i++){
@@ -109,6 +113,10 @@ public class SubjectList extends AppCompatActivity {
                     else {
                         if(subject != null){
                             subjectModify.addSubject(subject);
+                        }
+                        else {
+                            Toast.makeText(SubjectList.this, "Chưa đủ thông tin ! Vui lòng kiểm tra lại.", Toast.LENGTH_SHORT).show();
+                            return;
                         }
                         updateListSubject();
                         setAdapter();
@@ -211,15 +219,14 @@ public class SubjectList extends AppCompatActivity {
                 btnUpdate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if(edtIDSub.getText().toString().equalsIgnoreCase("") || edtNameSub.getText().toString().equalsIgnoreCase("") || edtCreditNumber.getText().toString().equalsIgnoreCase("")){
+                            Toast.makeText(SubjectList.this, "Chưa đủ thông tin ! Vui lòng kiểm tra lại.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         Subject subject = new Subject( edtIDSub.getText().toString(), edtNameSub.getText().toString(), Integer.parseInt(edtCreditNumber.getText().toString()));
-//                        subjectModify.updateSubject(subject);
-//                        setAdapter();
-//                        updateListSubject();
-
                         int result = subjectModify.updateSubject(subject);
                         Toast.makeText(SubjectList.this, "ID update: " + String.valueOf(id), Toast.LENGTH_SHORT).show();
                         if(result > 0){
-//                            subjectModify.updateSubject(subject);
                             updateListSubject();
                         }
                         else {

@@ -15,7 +15,7 @@ import android.content.Context;
 //import java.util.List;
 //
 //import static com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper.KEY_ID_INVOICE;
-//import static com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper.KEY_ID_SUB;
+import static com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper.KEY_ID_SUB;
 //import static com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper.TABLE_NAME_INFOR;
 //import static com.example.vantrantrucphuong.quanlyhocphi.Database.DBHelper.TABLE_NAME_INVOICE;
 //
@@ -71,6 +71,26 @@ public class InforModify {
         db.close();
         return listInvoice;
     }
+    public List<Infor> getAll() {
+        List<Infor> listInvoice = new ArrayList<>();
+        String selectQuery = "SELECT * FROM " + TABLE_NAME_INFOR   ;
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery,null);
+        if (cursor.moveToFirst()) {
+            do {
+                Infor infor = new Infor();
+                infor.setInvoice_id(cursor.getString(0));
+                infor.setSub_id(cursor.getString(1)+"");
+                infor.setMoney(cursor.getString(2));
+                listInvoice.add(infor);
+
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return listInvoice;
+    }
+
 //
 //    public int update(Invoice_Info infor){
 //        SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -82,10 +102,11 @@ public class InforModify {
 //        return db.update(TABLE_NAME_INFOR,contentValues,KEY_ID_SUB+"=?",new String[]{String.valueOf(infor.getInvoice_id())});
 //    }
 //
-//    public int delete(String invoice_id){
-//        SQLiteDatabase db = dbHelper.getWritableDatabase();
-//        return db.delete(TABLE_NAME_INFOR,KEY_ID_SUB+"=?",new String[] {String.valueOf(invoice_id)});
-//    }
+    public int delete(String sub_id , String invoice_id){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        return db.delete(TABLE_NAME_INFOR,KEY_ID_SUB+"=? and " +KEY_ID_INVOICE+ "=?",new String[]{String.valueOf(sub_id),String.valueOf(invoice_id)});
+//         db.delete(TABLE_NAME_INFOR,KEY_ID_SUB+"=?",new String[] {String.valueOf(invoice_id)});
+    }
 //
 //
 //    //Lay 1 du lieu
@@ -116,6 +137,5 @@ public class InforModify {
         Log.d(TAG, "addDetail Successfuly");
     }
 
-//>>>>>>> 76721ebb1e0d29529488a0f8e453481d316b843d
 
 }
